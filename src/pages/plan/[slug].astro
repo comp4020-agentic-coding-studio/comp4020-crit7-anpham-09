@@ -34,6 +34,18 @@ const progress = evaluateProgress(
 
 const terms = [...new Set(rows.map((r) => r.term))].sort();
 const catalogueRows = [...catalogue.values()].sort((a, b) => a.code.localeCompare(b.code));
+
+const currentYear = new Date().getFullYear();
+const termYears = [currentYear, currentYear + 1, currentYear + 2];
+function buildTermOptions(sessions: Iterable<string>): string[] {
+  const sorted = [...sessions].sort();
+  if (sorted.length === 0) return [];
+  const opts: string[] = [];
+  for (const y of termYears) {
+    for (const s of sorted) opts.push(`${y}-${s}`);
+  }
+  return opts;
+}
 ---
 
 <!doctype html>
@@ -44,16 +56,21 @@ const catalogueRows = [...catalogue.values()].sort((a, b) => a.code.localeCompar
     <title>{`Plan ${plan.slug} — Fine Print`}</title>
   </head>
   <body>
-    <nav aria-label="site">
-      <a href="/">Plan</a>
-      <a href="/readme/">About</a>
-    </nav>
+    <header class="site-header">
+      <a href="/" class="site-title">Fine Print</a>
+      <nav aria-label="site" class="site-nav">
+        <a href="/">Plan</a>
+        <a href="/readme/">About</a>
+      </nav>
+    </header>
     <main>
       <h1>{`Plan ${plan.slug}`}</h1>
-      <p>
-        {PROGRAM_LABEL}, {specialisation?.label ?? "no specialisation"}. This
-        page is the only way back in, so keep the address.
-      </p>
+      <div class="intro-box">
+        <p>
+          {PROGRAM_LABEL}, {specialisation?.label ?? "no specialisation"}. This
+          page is the only way back in, so keep the address.
+        </p>
+      </div>
 
       <section aria-labelledby="courses">
         <h2 id="courses">Courses</h2>
@@ -98,61 +115,6 @@ const catalogueRows = [...catalogue.values()].sort((a, b) => a.code.localeCompar
         }
       </section>
 
-      <section aria-labelledby="catalogue">
-        <h2 id="catalogue">Catalogue</h2>
-        <p>
-          Every course this app knows about, so you never have to type a code
-          blind. Prerequisites are the structured rule this app checks; open
-          "ANU's wording" under a course for its requisite note, ANU's own
-          prose in full.
-        </p>
-        <table class="catalogue-table">
-          <caption>The seeded catalogue, {catalogueRows.length} courses, by code</caption>
-          <thead>
-            <tr>
-              <th scope="col">Code</th>
-              <th scope="col">Title</th>
-              <th scope="col">Units</th>
-              <th scope="col">
-                <abbr title="Sessions">Sess.</abbr>
-              </th>
-              <th scope="col">
-                <abbr title="Permission code">Perm.</abbr>
-              </th>
-              <th scope="col">
-                <abbr title="Prerequisites">Prereqs</abbr>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {
-              catalogueRows.map((course) => (
-                <>
-                  <tr class="course-row">
-                    <th scope="row">{course.code}</th>
-                    <td>{course.title}</td>
-                    <td>{course.units}</td>
-                    <td>{[...course.sessions].sort().join(", ") || "—"}</td>
-                    <td>{course.needsPermissionCode ? "Yes" : "No"}</td>
-                    <td>
-                      {formatPrereqs(course.prereqs, course.requisitesModelled, course.requisiteNote)}
-                    </td>
-                  </tr>
-                  <tr class="requisite-row">
-                    <td colspan="6">
-                      <details>
-                        <summary>{`${course.code}: ANU's wording`}</summary>
-                        <p>{formatRequisiteNote(course.requisiteNote)}</p>
-                      </details>
-                    </td>
-                  </tr>
-                </>
-              ))
-            }
-          </tbody>
-        </table>
-      </section>
-
       <section aria-labelledby="add">
         <h2 id="add">Add a course</h2>
         <form method="post" action="/api/plan-items">
@@ -177,10 +139,11 @@ const catalogueRows = [...catalogue.values()].sort((a, b) => a.code.localeCompar
           — the rules ANU holds this plan to, because that is the year it
           commenced.
         </p>
-        <p>
-          {progress.totalUnits} of {progress.requiredTotal} units.
+        <div class="progress-summary">
+          <strong>{progress.totalUnits}</strong> of{" "}
+          <strong>{progress.requiredTotal}</strong> units.
           {progress.complete ? " This plan completes the degree." : " Not yet complete."}
-        </p>
+        </div>
         <table>
           <caption>Requirement buckets, and which courses landed in each</caption>
           <thead>
@@ -216,6 +179,83 @@ const catalogueRows = [...catalogue.values()].sort((a, b) => a.code.localeCompar
           )
         }
       </section>
+
+      <section aria-labelledby="catalogue">
+        <h2 id="catalogue">Catalogue</h2>
+        <p>
+          Every course this app knows about, so you never have to type a code
+          blind. Prerequisites are the structured rule this app checks; open
+          "ANU's wording" under a course for its requisite note, ANU's own
+          prose in full.
+        </p>
+        <div class="table-scroll">
+        <table class="catalogue-table">
+          <caption>The seeded catalogue, {catalogueRows.length} courses, by code</caption>
+          <thead>
+            <tr>
+              <th scope="col">Code</th>
+              <th scope="col">Title</th>
+              <th scope="col">Units</th>
+              <th scope="col">
+                <abbr title="Sessions">Sess.</abbr>
+              </th>
+              <th scope="col">
+                <abbr title="Permission code">Perm.</abbr>
+              </th>
+              <th scope="col">
+                <abbr title="Prerequisites">Prereqs</abbr>
+              </th>
+              <th scope="col">Add</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              catalogueRows.map((course) => {
+                const termOpts = buildTermOptions(course.sessions);
+                return (
+                  <>
+                    <tr class="course-row">
+                      <th scope="row">{course.code}</th>
+                      <td>{course.title}</td>
+                      <td>{course.units}</td>
+                      <td>{[...course.sessions].sort().join(", ") || "—"}</td>
+                      <td>{course.needsPermissionCode ? "Yes" : "No"}</td>
+                      <td>
+                        {formatPrereqs(course.prereqs, course.requisitesModelled, course.requisiteNote)}
+                      </td>
+                      <td>
+                        {termOpts.length > 0 ? (
+                          <form method="post" action="/api/plan-items" class="catalogue-add-form">
+                            <input type="hidden" name="plan" value={plan.slug} />
+                            <input type="hidden" name="course" value={course.code} />
+                            <label class="sr-only" for={`term-${course.code}`}>Term for {course.code}</label>
+                            <select id={`term-${course.code}`} name="term" class="catalogue-term-select">
+                              {termOpts.map((t) => <option value={t}>{t}</option>)}
+                            </select>
+                            <button class="catalogue-add-button" title={`Add ${course.code}`}>+</button>
+                          </form>
+                        ) : (
+                          <span>—</span>
+                        )}
+                      </td>
+                    </tr>
+                    <tr class="requisite-row">
+                      <td colspan="7">
+                        <details>
+                          <summary>{`${course.code}: ANU's wording`}</summary>
+                          <p>{formatRequisiteNote(course.requisiteNote)}</p>
+                        </details>
+                      </td>
+                    </tr>
+                  </>
+                );
+              })
+            }
+          </tbody>
+        </table>
+        </div>
+      </section>
     </main>
+    <footer class="site-footer">Fine Print — not affiliated with ANU</footer>
   </body>
 </html>

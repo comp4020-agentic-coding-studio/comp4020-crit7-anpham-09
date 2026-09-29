@@ -15,22 +15,27 @@ await bootstrapDemoPlan();
     <title>Fine Print — ANU study planning that tells you now</title>
   </head>
   <body>
-    <nav aria-label="site">
-      <a href="/">Plan</a>
-      <a href={`/plan/${DEMO_SLUG}`}>Example</a>
-      <a href="/readme/">About</a>
-    </nav>
+    <header class="site-header">
+      <a href="/" class="site-title">Fine Print</a>
+      <nav aria-label="site" class="site-nav">
+        <a href="/" aria-current="page">Plan</a>
+        <a href={`/plan/${DEMO_SLUG}`}>Example</a>
+        <a href="/readme/">About</a>
+      </nav>
+    </header>
     <main>
-      <h1>Fine Print</h1>
-      <p>
-        Programs and Courses knows whether you may enrol in a course. ISIS
-        knows whether your plan will graduate you. Both tell you after you
-        have decided. This is the same data, at the moment it is useful.
-      </p>
-      <p>
-        Plans are for the {PROGRAM_LABEL}. There is no login: the plan's
-        address is the only way back into it, so keep the link.
-      </p>
+      <h1>Study planner</h1>
+      <div class="intro-box">
+        <p>
+          Programs and Courses knows whether you may enrol in a course. ISIS
+          knows whether your plan will graduate you. Both tell you after you
+          have decided. This is the same data, at the moment it is useful.
+        </p>
+        <p>
+          Plans are for the {PROGRAM_LABEL}. There is no login: the plan's
+          address is the only way back into it, so keep the link.
+        </p>
+      </div>
       <p id="commencementYearHint">
         ANU holds you to the program requirements of the Academic Year you
         commenced, not the current one — pick the year your plan should
@@ -59,5 +64,6 @@ await bootstrapDemoPlan();
         course looks like.
       </p>
     </main>
+    <footer class="site-footer">Fine Print — not affiliated with ANU</footer>
   </body>
 </html>
