@@ -15,6 +15,13 @@
       "when": 1790679526498,
       "tag": "0001_complete_masked_marvel",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1790681078027,
+      "tag": "0002_known_jigsaw",
+      "breakpoints": true
     }
   ]
 }
