@@ -35,10 +35,6 @@ button {
   font: inherit;
 }
 
-#messages {
-  padding-inline-start: 1.2rem;
-}
-
 :root {
   --colour-text: oklch(0.22 0 90);
   --colour-link: oklch(0.55 0.25 262);

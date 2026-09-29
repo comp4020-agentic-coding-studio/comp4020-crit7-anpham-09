@@ -39,7 +39,9 @@ describe("the committed seed", () => {
       expect(levelOf(course.code), course.code).toBeGreaterThanOrEqual(1000);
     }
 
-    // The consuming buckets' required units reach the program total.
+    // The consuming buckets' required units don't add up to more than the
+    // program total — they may under-count (units left for electives), but
+    // never over-commit the plan.
     const consuming = seed.buckets.filter(
       (b: { mode: string }) => b.mode === "consuming",
     );

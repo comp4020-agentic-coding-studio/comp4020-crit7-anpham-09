@@ -8,6 +8,7 @@ dist/
 ._*
 Thumbs.db
 Desktop.ini
+.idea/
 
 # the local dev database — state on your machine, never in the repo
 .data/

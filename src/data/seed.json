@@ -132,7 +132,10 @@
       "requisiteNote": "To enrol in this course you must: Be enrolled in the Master of Computing (MCOMP) and have successfully completed: COMP8260 and COMP6442 OR Be enrolled in the Master of Machine Learning and Computer Vision (MMLCV) and have successfully completed: COMP6710 and (COMP6250 OR COMP8260). Incompatible with COMP8715 and COMP8755 and COMP8800. You will need to undergo competitive entry to enrol in this course. You will need to contact the School of Computing to request a permission code.",
       "needsPermissionCode": true,
       "sessions": ["S1", "S2"],
-      "prereqs": [{ "options": ["COMP6442"], "concurrent": false }]
+      "prereqs": [
+        { "options": ["COMP6442"], "concurrent": false },
+        { "options": ["COMP8280"], "concurrent": false }
+      ]
     },
     {
       "code": "MATH6005",

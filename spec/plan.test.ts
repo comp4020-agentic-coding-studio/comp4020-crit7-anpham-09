@@ -49,7 +49,15 @@ describe("a plan", () => {
 
     // A completely fresh request: nothing carried over from the POST.
     const reloaded = await fetch(`${baseUrl}${path}`);
-    expect(await reloaded.text()).toContain("COMP8410");
+    const html = await reloaded.text();
+    // "2027-S1" is the page's own term placeholder, so it's a false match on
+    // an empty plan; "2027-S2" only appears if the posted item was actually
+    // stored. "Data Mining" is COMP8410's catalogue title, rendered only
+    // when the item resolves against the catalogue — a second, independent
+    // signal that persistence (not just a static placeholder) is what's
+    // showing up.
+    expect(html).toContain("2027-S2");
+    expect(html).toContain("Data Mining");
   });
 
   it("404s on an unknown slug", async () => {
