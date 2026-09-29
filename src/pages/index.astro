@@ -1,6 +1,7 @@
 ---
 import { bootstrapDemoPlan, PROGRAM_LABEL } from "../lib/db";
 import { DEMO_SLUG } from "../lib/plans";
+import { ACADEMIC_YEARS, DEFAULT_ACADEMIC_YEAR } from "../lib/seed-types";
 import "../styles.css";
 
 await bootstrapDemoPlan();
@@ -31,6 +32,21 @@ await bootstrapDemoPlan();
         address is the only way back into it, so keep the link.
       </p>
       <form method="post" action="/api/plans">
+        <label for="commencementYear">Commencement year</label>
+        <select id="commencementYear" name="commencementYear">
+          {
+            ACADEMIC_YEARS.map((year) => (
+              <option value={year} selected={year === DEFAULT_ACADEMIC_YEAR}>
+                {year}
+              </option>
+            ))
+          }
+        </select>
+        <p>
+          ANU holds you to the program requirements of the Academic Year you
+          commenced, not the current one — pick the year your plan should
+          follow.
+        </p>
         <button>Start a plan</button>
       </form>
       <p>

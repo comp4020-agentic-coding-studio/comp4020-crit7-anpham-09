@@ -41,14 +41,49 @@ describe("the committed seed", () => {
 
     // The consuming buckets' required units don't add up to more than the
     // program total — they may under-count (units left for electives), but
-    // never over-commit the plan.
-    const consuming = seed.buckets.filter(
-      (b: { mode: string }) => b.mode === "consuming",
-    );
-    const required = consuming.reduce(
-      (n: number, b: { minUnits: number }) => n + b.minUnits,
-      0,
-    );
-    expect(required).toBeLessThanOrEqual(seed.program.totalUnits);
+    // never over-commit the plan. Checked per Academic Year: each year has
+    // its own full set of buckets, so summing across years would massively
+    // over-count against the one program total.
+    const { ACADEMIC_YEARS } = await import(TYPES);
+    for (const year of ACADEMIC_YEARS) {
+      const consuming = seed.buckets.filter(
+        (b: { mode: string; academicYear: number }) =>
+          b.mode === "consuming" && b.academicYear === year,
+      );
+      const required = consuming.reduce(
+        (n: number, b: { minUnits: number }) => n + b.minUnits,
+        0,
+      );
+      expect(required, `academicYear ${year}`).toBeLessThanOrEqual(
+        seed.program.totalUnits,
+      );
+    }
+  });
+
+  it("has exactly one bucket per (key, academicYear) and every year carries the same set of keys", async () => {
+    const seedUrl = new URL(SEED, import.meta.url);
+    const seed = JSON.parse(readFileSync(seedUrl, "utf8"));
+    const { ACADEMIC_YEARS } = await import(TYPES);
+
+    const seen = new Set<string>();
+    for (const b of seed.buckets as { key: string; academicYear: number }[]) {
+      const id = `${b.key}@${b.academicYear}`;
+      expect(seen.has(id), `duplicate bucket ${id}`).toBe(false);
+      seen.add(id);
+      expect(ACADEMIC_YEARS, b.key).toContain(b.academicYear);
+    }
+
+    const keysByYear = new Map<number, Set<string>>();
+    for (const b of seed.buckets as { key: string; academicYear: number }[]) {
+      const set = keysByYear.get(b.academicYear) ?? new Set<string>();
+      set.add(b.key);
+      keysByYear.set(b.academicYear, set);
+    }
+    const [firstYear, ...restYears] = ACADEMIC_YEARS as number[];
+    const firstKeys = [...(keysByYear.get(firstYear) ?? [])].sort();
+    for (const year of restYears) {
+      const keys = [...(keysByYear.get(year) ?? [])].sort();
+      expect(keys, `academicYear ${year}`).toEqual(firstKeys);
+    }
   });
 });

@@ -30,6 +30,14 @@ input {
   font: inherit;
 }
 
+/* WCAG 2.5.5: the commencement-year and status selects are interactive
+   controls, so their hit area clears 44px tall the same as button. */
+select {
+  min-height: 44px;
+  padding: 0.4rem 0.6rem;
+  font: inherit;
+}
+
 button {
   padding: 0.4rem 1rem;
   font: inherit;

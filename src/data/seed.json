@@ -26,6 +26,16 @@
       "prereqs": []
     },
     {
+      "code": "COMP6250",
+      "title": "Professional Practice: Holistic Thinking and Communication",
+      "units": 6,
+      "subject": "COMP",
+      "requisiteNote": "To enrol in this course you must be enrolled in Graduate Diploma of Computing or Master of Computing or Master of Computing (Advanced) or Master of Machine Learning and Computer Vision.",
+      "needsPermissionCode": false,
+      "sessions": ["S1"],
+      "prereqs": []
+    },
+    {
       "code": "COMP6260",
       "title": "Foundations of Computing",
       "units": 6,
@@ -54,9 +64,19 @@
       "needsPermissionCode": false,
       "sessions": ["S1", "S2"],
       "prereqs": [
-        { "options": ["COMP7710"], "concurrent": false },
+        { "options": ["COMP6710", "COMP7710"], "concurrent": false },
         { "options": ["MATH6005", "COMP6260"], "concurrent": true }
       ]
+    },
+    {
+      "code": "COMP6710",
+      "title": "Structured Programming",
+      "units": 6,
+      "subject": "COMP",
+      "requisiteNote": "You are not able to enrol in this course if you have previously completed COMP1110 OR COMP1140 OR if you are enrolled in the Master of Computing (Advanced).",
+      "needsPermissionCode": false,
+      "sessions": ["S1", "S2"],
+      "prereqs": []
     },
     {
       "code": "COMP6730",
@@ -89,6 +109,16 @@
       "prereqs": [{ "options": ["COMP6390"], "concurrent": false }]
     },
     {
+      "code": "COMP8260",
+      "title": "Professional Practice: Responsible Innovation and Leadership",
+      "units": 6,
+      "subject": "COMP",
+      "requisiteNote": "To enrol in this course you must be enrolled in the Graduate Diploma of Computing or Master of Computing or Master of Computing (Advanced) or Master of Machine Learning and Computer Vision.",
+      "needsPermissionCode": false,
+      "sessions": ["S2"],
+      "prereqs": []
+    },
+    {
       "code": "COMP8280",
       "title": "Responsible Practice, Innovation and Leadership",
       "units": 6,
@@ -108,7 +138,7 @@
       "sessions": ["S1"],
       "prereqs": [
         { "options": ["COMP6240"], "concurrent": false },
-        { "options": ["COMP6730"], "concurrent": false }
+        { "options": ["COMP6730", "COMP6710"], "concurrent": false }
       ]
     },
     {
@@ -121,7 +151,7 @@
       "sessions": ["S1", "S2"],
       "prereqs": [
         { "options": ["COMP6442"], "concurrent": false },
-        { "options": ["COMP8280"], "concurrent": false }
+        { "options": ["COMP8260", "COMP8280"], "concurrent": false }
       ]
     },
     {
@@ -134,7 +164,7 @@
       "sessions": ["S1", "S2"],
       "prereqs": [
         { "options": ["COMP6442"], "concurrent": false },
-        { "options": ["COMP8280"], "concurrent": false }
+        { "options": ["COMP8260"], "concurrent": false }
       ]
     },
     {
@@ -151,20 +181,23 @@
   "buckets": [
     {
       "key": "compulsory",
+      "academicYear": 2024,
       "label": "Compulsory courses",
-      "minUnits": 30,
-      "capUnits": 30,
+      "minUnits": 24,
+      "capUnits": 24,
       "kind": "list",
       "mode": "consuming",
       "exclusive": true,
-      "members": ["COMP6120", "COMP6442", "COMP7710", "COMP8280"],
+      "members": ["COMP6250", "COMP6442", "COMP6710", "COMP8260"],
       "subjects": [],
       "minLevel": null,
       "maxLevel": null,
+      "includeSpecialisationMembers": false,
       "sortOrder": 1
     },
     {
       "key": "foundational",
+      "academicYear": 2024,
       "label": "Foundational courses",
       "minUnits": 6,
       "capUnits": 6,
@@ -175,12 +208,14 @@
       "subjects": [],
       "minLevel": null,
       "maxLevel": null,
+      "includeSpecialisationMembers": false,
       "sortOrder": 2
     },
     {
       "key": "project",
+      "academicYear": 2024,
       "label": "Project courses",
-      "minUnits": 0,
+      "minUnits": 12,
       "capUnits": 12,
       "kind": "list",
       "mode": "consuming",
@@ -189,10 +224,12 @@
       "subjects": [],
       "minLevel": null,
       "maxLevel": null,
+      "includeSpecialisationMembers": false,
       "sortOrder": 3
     },
     {
       "key": "specialisation",
+      "academicYear": 2024,
       "label": "Specialisation",
       "minUnits": 24,
       "capUnits": 24,
@@ -203,10 +240,12 @@
       "subjects": [],
       "minLevel": null,
       "maxLevel": null,
+      "includeSpecialisationMembers": false,
       "sortOrder": 4
     },
     {
       "key": "further",
+      "academicYear": 2024,
       "label": "Further computing and engineering",
       "minUnits": 18,
       "capUnits": 18,
@@ -217,10 +256,12 @@
       "subjects": ["COMP", "ENGN"],
       "minLevel": 6000,
       "maxLevel": 8000,
+      "includeSpecialisationMembers": false,
       "sortOrder": 5
     },
     {
       "key": "elective",
+      "academicYear": 2024,
       "label": "Electives",
       "minUnits": 6,
       "capUnits": 18,
@@ -231,10 +272,124 @@
       "subjects": [],
       "minLevel": null,
       "maxLevel": null,
+      "includeSpecialisationMembers": false,
       "sortOrder": 6
     },
     {
       "key": "comp8000",
+      "academicYear": 2024,
+      "label": "8000-level COMP (or non-COMP Specialisation courses)",
+      "minUnits": 24,
+      "capUnits": 96,
+      "kind": "predicate",
+      "mode": "overlay",
+      "exclusive": false,
+      "members": [],
+      "subjects": ["COMP"],
+      "minLevel": 8000,
+      "maxLevel": 8000,
+      "includeSpecialisationMembers": true,
+      "sortOrder": 7
+    },
+    {
+      "key": "compulsory",
+      "academicYear": 2025,
+      "label": "Compulsory courses",
+      "minUnits": 24,
+      "capUnits": 24,
+      "kind": "list",
+      "mode": "consuming",
+      "exclusive": true,
+      "members": ["COMP6250", "COMP6442", "COMP6710", "COMP8260"],
+      "subjects": [],
+      "minLevel": null,
+      "maxLevel": null,
+      "includeSpecialisationMembers": false,
+      "sortOrder": 1
+    },
+    {
+      "key": "foundational",
+      "academicYear": 2025,
+      "label": "Foundational courses",
+      "minUnits": 6,
+      "capUnits": 6,
+      "kind": "list",
+      "mode": "consuming",
+      "exclusive": false,
+      "members": ["MATH6005", "COMP6260"],
+      "subjects": [],
+      "minLevel": null,
+      "maxLevel": null,
+      "includeSpecialisationMembers": false,
+      "sortOrder": 2
+    },
+    {
+      "key": "project",
+      "academicYear": 2025,
+      "label": "Project courses",
+      "minUnits": 12,
+      "capUnits": 12,
+      "kind": "list",
+      "mode": "consuming",
+      "exclusive": true,
+      "members": ["COMP8715", "COMP8830"],
+      "subjects": [],
+      "minLevel": null,
+      "maxLevel": null,
+      "includeSpecialisationMembers": false,
+      "sortOrder": 3
+    },
+    {
+      "key": "specialisation",
+      "academicYear": 2025,
+      "label": "Specialisation",
+      "minUnits": 24,
+      "capUnits": 24,
+      "kind": "list",
+      "mode": "consuming",
+      "exclusive": false,
+      "members": [],
+      "subjects": [],
+      "minLevel": null,
+      "maxLevel": null,
+      "includeSpecialisationMembers": false,
+      "sortOrder": 4
+    },
+    {
+      "key": "further",
+      "academicYear": 2025,
+      "label": "Further computing and engineering",
+      "minUnits": 18,
+      "capUnits": 18,
+      "kind": "predicate",
+      "mode": "consuming",
+      "exclusive": false,
+      "members": [],
+      "subjects": ["COMP", "ENGN"],
+      "minLevel": 6000,
+      "maxLevel": 8000,
+      "includeSpecialisationMembers": false,
+      "sortOrder": 5
+    },
+    {
+      "key": "elective",
+      "academicYear": 2025,
+      "label": "Electives",
+      "minUnits": 6,
+      "capUnits": 18,
+      "kind": "predicate",
+      "mode": "consuming",
+      "exclusive": false,
+      "members": [],
+      "subjects": [],
+      "minLevel": null,
+      "maxLevel": null,
+      "includeSpecialisationMembers": false,
+      "sortOrder": 6
+    },
+    {
+      "key": "comp8000",
+      "academicYear": 2025,
       "label": "8000-level COMP",
       "minUnits": 24,
       "capUnits": 96,
@@ -245,6 +400,119 @@
       "subjects": ["COMP"],
       "minLevel": 8000,
       "maxLevel": 8000,
+      "includeSpecialisationMembers": false,
+      "sortOrder": 7
+    },
+    {
+      "key": "compulsory",
+      "academicYear": 2026,
+      "label": "Compulsory courses",
+      "minUnits": 30,
+      "capUnits": 30,
+      "kind": "list",
+      "mode": "consuming",
+      "exclusive": true,
+      "members": ["COMP6120", "COMP6442", "COMP7710", "COMP8280"],
+      "subjects": [],
+      "minLevel": null,
+      "maxLevel": null,
+      "includeSpecialisationMembers": false,
+      "sortOrder": 1
+    },
+    {
+      "key": "foundational",
+      "academicYear": 2026,
+      "label": "Foundational courses",
+      "minUnits": 6,
+      "capUnits": 12,
+      "kind": "list",
+      "mode": "consuming",
+      "exclusive": false,
+      "members": ["MATH6005", "COMP6260"],
+      "subjects": [],
+      "minLevel": null,
+      "maxLevel": null,
+      "includeSpecialisationMembers": false,
+      "sortOrder": 2
+    },
+    {
+      "key": "project",
+      "academicYear": 2026,
+      "label": "Project courses",
+      "minUnits": 0,
+      "capUnits": 12,
+      "kind": "list",
+      "mode": "consuming",
+      "exclusive": true,
+      "members": ["COMP8715", "COMP8830"],
+      "subjects": [],
+      "minLevel": null,
+      "maxLevel": null,
+      "includeSpecialisationMembers": false,
+      "sortOrder": 3
+    },
+    {
+      "key": "specialisation",
+      "academicYear": 2026,
+      "label": "Specialisation",
+      "minUnits": 24,
+      "capUnits": 24,
+      "kind": "list",
+      "mode": "consuming",
+      "exclusive": false,
+      "members": [],
+      "subjects": [],
+      "minLevel": null,
+      "maxLevel": null,
+      "includeSpecialisationMembers": false,
+      "sortOrder": 4
+    },
+    {
+      "key": "further",
+      "academicYear": 2026,
+      "label": "Further computing and engineering",
+      "minUnits": 18,
+      "capUnits": 18,
+      "kind": "predicate",
+      "mode": "consuming",
+      "exclusive": false,
+      "members": [],
+      "subjects": ["COMP", "ENGN"],
+      "minLevel": 6000,
+      "maxLevel": 8000,
+      "includeSpecialisationMembers": false,
+      "sortOrder": 5
+    },
+    {
+      "key": "elective",
+      "academicYear": 2026,
+      "label": "Electives",
+      "minUnits": 6,
+      "capUnits": 18,
+      "kind": "predicate",
+      "mode": "consuming",
+      "exclusive": false,
+      "members": [],
+      "subjects": [],
+      "minLevel": null,
+      "maxLevel": null,
+      "includeSpecialisationMembers": false,
+      "sortOrder": 6
+    },
+    {
+      "key": "comp8000",
+      "academicYear": 2026,
+      "label": "8000-level COMP",
+      "minUnits": 24,
+      "capUnits": 96,
+      "kind": "predicate",
+      "mode": "overlay",
+      "exclusive": false,
+      "members": [],
+      "subjects": ["COMP"],
+      "minLevel": 8000,
+      "maxLevel": 8000,
+      "includeSpecialisationMembers": false,
       "sortOrder": 7
     }
   ],

@@ -39,7 +39,15 @@ function accepts(
     return members.includes(course.code);
   }
   if (bucket.subjects.length && !bucket.subjects.includes(course.subject)) {
-    return false;
+    // The 2024 8000-level overlay's rule text widens to "or non-COMP courses
+    // included in the Specialisations" — a course that fails the subject
+    // predicate can still count if it's a specialisation member, regardless
+    // of level. 2025 and 2026 leave `includeSpecialisationMembers` false, so
+    // this stays exactly the old COMP-only behaviour for them.
+    return (
+      bucket.includeSpecialisationMembers &&
+      specialisationMembers.includes(course.code)
+    );
   }
   const level = levelOf(course.code);
   if (bucket.minLevel !== null && level < bucket.minLevel) return false;

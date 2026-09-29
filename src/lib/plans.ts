@@ -2,6 +2,7 @@ import { and, eq } from "drizzle-orm";
 import { DEFAULT_SPECIALISATION, db, PROGRAM_CODE } from "./db";
 import type { PlanItem } from "./rules/eligibility";
 import { planItems, plans } from "./schema";
+import { DEFAULT_ACADEMIC_YEAR, type AcademicYear } from "./seed-types";
 
 // The only module that writes. Everything else reads.
 
@@ -19,7 +20,10 @@ function makeSlug(): string {
   return `${a}-${n}-${suffix}`;
 }
 
-export function createPlan(specialisationKey?: string): string {
+export function createPlan(
+  specialisationKey?: string,
+  commencementYear: AcademicYear = DEFAULT_ACADEMIC_YEAR,
+): string {
   for (let attempt = 0; attempt < 10; attempt++) {
     const slug = makeSlug();
     if (findPlan(slug)) continue;
@@ -28,6 +32,7 @@ export function createPlan(specialisationKey?: string): string {
         slug,
         programCode: PROGRAM_CODE,
         specialisationKey: specialisationKey ?? DEFAULT_SPECIALISATION,
+        commencementYear,
       })
       .run();
     return slug;

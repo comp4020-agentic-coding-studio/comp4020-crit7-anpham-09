@@ -1,6 +1,7 @@
 import { mkdtempSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { eq } from "drizzle-orm";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { Seed } from "../src/lib/seed-types";
 
@@ -43,7 +44,7 @@ describe("catalogue: db-layer round trip", () => {
     const { loadCatalogue } = await bootAgainst(freshDbPath());
     const cat = loadCatalogue();
 
-    expect(cat.size).toBe(13);
+    expect(cat.size).toBe(16);
     expect(cat.size).toBe(seed.courses.length);
 
     for (const course of seed.courses) {
@@ -71,9 +72,16 @@ describe("catalogue: db-layer round trip", () => {
     expect(comp6120?.prereqs).toEqual([{ options: ["COMP6442"], concurrent: true }]);
 
     // COMP6442: two groups — the first strictly earlier, the second concurrent.
+    // Group 0 has two in-catalogue options (COMP6710 and COMP7710 both
+    // satisfy the real prose's "completed (COMP6710 OR COMP7710 OR ...)"),
+    // so this is dropping only the two out-of-catalogue OR-alternatives.
     const comp6442 = cat.get("COMP6442");
     expect(comp6442?.prereqs.length).toBe(2);
-    expect(comp6442?.prereqs[0]).toEqual({ options: ["COMP7710"], concurrent: false });
+    expect([...(comp6442?.prereqs[0].options ?? [])].sort()).toEqual([
+      "COMP6710",
+      "COMP7710",
+    ]);
+    expect(comp6442?.prereqs[0].concurrent).toBe(false);
     expect(comp6442?.prereqs[1].concurrent).toBe(true);
     expect([...(comp6442?.prereqs[1].options ?? [])].sort()).toEqual([
       "COMP6260",
@@ -81,14 +89,16 @@ describe("catalogue: db-layer round trip", () => {
     ]);
   });
 
-  it("loadBuckets() sorts ascending by sortOrder; the specialisation bucket has no stored members", async () => {
+  it("loadBuckets(year) sorts ascending by sortOrder; the specialisation bucket has no stored members", async () => {
     const { loadBuckets } = await bootAgainst(freshDbPath());
-    const buckets = loadBuckets();
+    const buckets = loadBuckets(2026);
 
+    const seedFor2026 = seed.buckets.filter((b) => b.academicYear === 2026);
     expect(buckets.length).toBe(7);
-    expect(buckets.length).toBe(seed.buckets.length);
+    expect(buckets.length).toBe(seedFor2026.length);
     const orders = buckets.map((b) => b.sortOrder);
     expect(orders).toEqual([...orders].sort((a, b) => a - b));
+    expect(buckets.every((b) => b.academicYear === 2026)).toBe(true);
 
     // Members come from the plan's chosen specialisation at evaluation time,
     // not from a stored bucket_members row — this stays empty by design.
@@ -97,20 +107,39 @@ describe("catalogue: db-layer round trip", () => {
     expect(specialisation?.members).toEqual([]);
   });
 
+  it("loadBuckets(year) scopes strictly to that Academic Year", async () => {
+    const { loadBuckets } = await bootAgainst(freshDbPath());
+    const buckets2024 = loadBuckets(2024);
+    const buckets2026 = loadBuckets(2026);
+
+    expect(buckets2024.every((b) => b.academicYear === 2024)).toBe(true);
+    expect(buckets2026.every((b) => b.academicYear === 2026)).toBe(true);
+
+    const compulsory2024 = buckets2024.find((b) => b.key === "compulsory");
+    const compulsory2026 = buckets2026.find((b) => b.key === "compulsory");
+    expect(compulsory2024).toBeDefined();
+    expect(compulsory2026).toBeDefined();
+    // The two years' compulsory lists are structurally different (this is
+    // the whole feature) — if this ever equals, year scoping broke.
+    expect([...(compulsory2024?.members ?? [])].sort()).not.toEqual(
+      [...(compulsory2026?.members ?? [])].sort(),
+    );
+  });
+
   it("boot seeding is idempotent: re-running it against the same file leaves row counts unchanged", async () => {
     const dbPath = freshDbPath();
 
     const first = await bootAgainst(dbPath);
-    expect(first.loadCatalogue().size).toBe(13);
-    expect(first.loadBuckets().length).toBe(7);
+    expect(first.loadCatalogue().size).toBe(16);
+    expect(first.loadBuckets(2026).length).toBe(7);
     const firstMeta = first.db.select().from(first.seedMeta).all();
     expect(firstMeta.length).toBe(1);
 
     // Fresh module graph, same underlying file: the module-scope
     // `seedReferenceData()` call runs again on import.
     const second = await bootAgainst(dbPath);
-    expect(second.loadCatalogue().size).toBe(13);
-    expect(second.loadBuckets().length).toBe(7);
+    expect(second.loadCatalogue().size).toBe(16);
+    expect(second.loadBuckets(2026).length).toBe(7);
     const secondMeta = second.db.select().from(second.seedMeta).all();
     expect(secondMeta.length).toBe(1);
     expect(secondMeta[0].hash).toBe(firstMeta[0].hash);
@@ -147,7 +176,7 @@ describe("catalogue: db-layer round trip", () => {
     expect(itemsAfter[0].courseCode).toBe("COMP6120");
   });
 
-  it("loadBuckets() sorts even when the physical row order is reversed", async () => {
+  it("loadBuckets(year) sorts even when the physical row order is reversed", async () => {
     // Regression test for a vacuous-assertion bug: seed.json already lists
     // buckets in ascending sortOrder, seeding inserts them in file order, and
     // a plain SELECT returns SQLite rows in rowid (insertion) order — so
@@ -155,22 +184,33 @@ describe("catalogue: db-layer round trip", () => {
     // loadBuckets() actually sorts. This test breaks that by physically
     // reversing the stored row order first, so a missing `.sort()` in
     // loadBuckets() would come back descending and fail here.
+    //
+    // Scoped to 2026's rows only: buckets now carries all three years in one
+    // table (composite key `(key, academicYear)`), so deleting and
+    // re-inserting the whole table would also have to reconstruct the other
+    // two years' rows. Deleting and reversing just 2026's slice keeps the
+    // sabotage targeted at the one year this assertion checks.
     const { db, buckets, loadBuckets } = await bootAgainst(freshDbPath());
 
-    const rows = db.select().from(buckets).all();
+    const rows = db.select().from(buckets).where(eq(buckets.academicYear, 2026)).all();
     expect(rows.length).toBe(7);
     const reversed = [...rows].sort((a, b) => b.sortOrder - a.sortOrder);
 
-    db.delete(buckets).run();
+    db.delete(buckets).where(eq(buckets.academicYear, 2026)).run();
     for (const row of reversed) {
       db.insert(buckets).values(row).run();
     }
 
     // Confirm the sabotage worked: a plain SELECT now yields descending.
-    const rawAfter = db.select().from(buckets).all().map((b) => b.sortOrder);
+    const rawAfter = db
+      .select()
+      .from(buckets)
+      .where(eq(buckets.academicYear, 2026))
+      .all()
+      .map((b) => b.sortOrder);
     expect(rawAfter).toEqual([7, 6, 5, 4, 3, 2, 1]);
 
-    const result = loadBuckets();
+    const result = loadBuckets(2026);
     expect(result.map((b) => b.sortOrder)).toEqual([1, 2, 3, 4, 5, 6, 7]);
     expect(result.map((b) => b.key)).toEqual([
       "compulsory",

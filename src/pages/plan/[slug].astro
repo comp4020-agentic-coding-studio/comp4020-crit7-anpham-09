@@ -6,6 +6,7 @@ import { evaluatePlan } from "../../lib/rules/eligibility";
 import { evaluateProgress } from "../../lib/rules/progress";
 import { bucketUnitsLabel } from "../../lib/bucket-display";
 import { formatPrereqs } from "../../lib/catalogue-display";
+import type { AcademicYear } from "../../lib/seed-types";
 import "../../styles.css";
 
 const { slug } = Astro.params;
@@ -15,7 +16,7 @@ if (!plan) {
 }
 
 const catalogue = loadCatalogue();
-const buckets = loadBuckets();
+const buckets = loadBuckets(plan.commencementYear as AcademicYear);
 const specialisation = loadSpecialisation(plan.specialisationKey);
 
 const rows = listItemRows(plan.id);
@@ -170,9 +171,9 @@ const catalogueRows = [...catalogue.values()].sort((a, b) => a.code.localeCompar
       <section aria-labelledby="progress">
         <h2 id="progress">Degree progress</h2>
         <p>
-          These are the 2026 Academic Year's requirements; ANU holds you to
-          the rules of the year you commenced, so if that isn't 2026, treat
-          this progress as indicative only.
+          These are the {plan.commencementYear} Academic Year's requirements
+          — the rules ANU holds this plan to, because that is the year it
+          commenced.
         </p>
         <p>
           {progress.totalUnits} of {progress.requiredTotal} units.

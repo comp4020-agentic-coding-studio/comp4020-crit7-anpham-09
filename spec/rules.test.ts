@@ -141,6 +141,7 @@ beforeAll(async () => {
 function bucket(over: Partial<SeedBucket> & { key: string }): SeedBucket {
   return {
     label: over.key,
+    academicYear: 2026,
     minUnits: 0,
     capUnits: 96,
     kind: "list",
@@ -150,6 +151,7 @@ function bucket(over: Partial<SeedBucket> & { key: string }): SeedBucket {
     subjects: [],
     minLevel: null,
     maxLevel: null,
+    includeSpecialisationMembers: false,
     sortOrder: 1,
     ...over,
   };
@@ -216,6 +218,51 @@ describe("progress", () => {
     const report = evaluateProgress(items, CATALOGUE, buckets, [], 96);
     expect(report.buckets.find((b: { key: string }) => b.key === "foundational").allocatedUnits).toBe(6);
     expect(report.buckets.find((b: { key: string }) => b.key === "elective").allocatedUnits).toBe(6);
+  });
+
+  it("an overlay with includeSpecialisationMembers accepts a non-matching-subject specialisation member", () => {
+    // The 2024 8000-level overlay's rule text widens to "or non-COMP courses
+    // included in the Specialisations" — this is that widened predicate,
+    // isolated from the real seed so it stays provable without depending on
+    // the current catalogue having a non-COMP specialisation member.
+    const buckets = [
+      bucket({
+        key: "comp8000",
+        minUnits: 6,
+        mode: "overlay",
+        kind: "predicate",
+        subjects: ["COMP"],
+        minLevel: 8000,
+        maxLevel: 8000,
+        includeSpecialisationMembers: true,
+        sortOrder: 1,
+      }),
+    ];
+    const items = [planned("MATH6005", "2026-S2")];
+    const catalogueWithMath = new Map(CATALOGUE);
+    catalogueWithMath.set(
+      "MATH6005",
+      course("MATH6005", { subject: "MATH" }),
+    );
+    const withFlag = evaluateProgress(
+      items,
+      catalogueWithMath,
+      buckets,
+      ["MATH6005"],
+      96,
+    );
+    expect(withFlag.buckets[0].allocatedUnits).toBe(6);
+
+    // Without the flag (2025/2026's behaviour) the same non-COMP course is
+    // rejected by the overlay even though it's still a specialisation member.
+    const withoutFlag = evaluateProgress(
+      items,
+      catalogueWithMath,
+      [{ ...buckets[0], includeSpecialisationMembers: false }],
+      ["MATH6005"],
+      96,
+    );
+    expect(withoutFlag.buckets[0].allocatedUnits).toBe(0);
   });
 
   it("is complete only when every minimum is met, nothing is exceeded, and the total is reached", () => {

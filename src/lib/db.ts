@@ -95,6 +95,7 @@ function seedReferenceData(): void {
       tx.insert(buckets)
         .values({
           key: bucket.key,
+          academicYear: bucket.academicYear,
           programCode: seed.program.code,
           label: bucket.label,
           minUnits: bucket.minUnits,
@@ -105,12 +106,17 @@ function seedReferenceData(): void {
           subjects: bucket.subjects.join(","),
           minLevel: bucket.minLevel,
           maxLevel: bucket.maxLevel,
+          includeSpecialisationMembers: bucket.includeSpecialisationMembers,
           sortOrder: bucket.sortOrder,
         })
         .run();
       for (const code of bucket.members) {
         tx.insert(bucketMembers)
-          .values({ bucketKey: bucket.key, courseCode: code })
+          .values({
+            bucketKey: bucket.key,
+            academicYear: bucket.academicYear,
+            courseCode: code,
+          })
           .run();
       }
     }

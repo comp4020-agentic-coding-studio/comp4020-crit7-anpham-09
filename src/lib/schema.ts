@@ -42,28 +42,45 @@ export const prereqOptions = sqliteTable("prereq_options", {
   courseCode: text("course_code").notNull(),
 });
 
-export const buckets = sqliteTable("buckets", {
-  key: text().primaryKey(),
-  programCode: text("program_code").notNull(),
-  label: text().notNull(),
-  minUnits: int("min_units").notNull(),
-  capUnits: int("cap_units").notNull(),
-  kind: text().notNull(),
-  mode: text().notNull(),
-  exclusive: int({ mode: "boolean" }).notNull().default(false),
-  subjects: text().notNull().default(""),
-  minLevel: int("min_level"),
-  maxLevel: int("max_level"),
-  sortOrder: int("sort_order").notNull(),
-});
+// A bucket's rule is scoped to one Academic Year (ANU holds a student to the
+// year they commenced), so the same `key` (e.g. "compulsory") recurs once per
+// year with different units and membership — the primary key has to carry
+// the year alongside the key.
+export const buckets = sqliteTable(
+  "buckets",
+  {
+    key: text().notNull(),
+    academicYear: int("academic_year").notNull().default(2026),
+    programCode: text("program_code").notNull(),
+    label: text().notNull(),
+    minUnits: int("min_units").notNull(),
+    capUnits: int("cap_units").notNull(),
+    kind: text().notNull(),
+    mode: text().notNull(),
+    exclusive: int({ mode: "boolean" }).notNull().default(false),
+    subjects: text().notNull().default(""),
+    minLevel: int("min_level"),
+    maxLevel: int("max_level"),
+    /** See `SeedBucket.includeSpecialisationMembers`: the 2024 8000-level
+     *  overlay's predicate widens to accept non-COMP specialisation members. */
+    includeSpecialisationMembers: int("include_specialisation_members", {
+      mode: "boolean",
+    })
+      .notNull()
+      .default(false),
+    sortOrder: int("sort_order").notNull(),
+  },
+  (t) => [primaryKey({ columns: [t.key, t.academicYear] })],
+);
 
 export const bucketMembers = sqliteTable(
   "bucket_members",
   {
     bucketKey: text("bucket_key").notNull(),
+    academicYear: int("academic_year").notNull().default(2026),
     courseCode: text("course_code").notNull(),
   },
-  (t) => [primaryKey({ columns: [t.bucketKey, t.courseCode] })],
+  (t) => [primaryKey({ columns: [t.bucketKey, t.academicYear, t.courseCode] })],
 );
 
 export const specialisations = sqliteTable("specialisations", {
@@ -92,6 +109,10 @@ export const plans = sqliteTable("plans", {
   slug: text().notNull().unique(),
   programCode: text("program_code").notNull(),
   specialisationKey: text("specialisation_key").notNull(),
+  /** The Academic Year the student commenced — ANU holds them to that year's
+   *  requirements, not the current one. Existing rows predate this column
+   *  and were all implicitly created under 2026, hence the default. */
+  commencementYear: int("commencement_year").notNull().default(2026),
   createdAt: text("created_at")
     .notNull()
     .default(sql`(datetime('now'))`),

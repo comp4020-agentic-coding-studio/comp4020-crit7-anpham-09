@@ -11,6 +11,7 @@ import {
   specialisations,
 } from "./schema";
 import type {
+  AcademicYear,
   PrereqGroup,
   SeedBucket,
   SeedCourse,
@@ -63,9 +64,17 @@ export function loadCatalogue(): Map<string, SeedCourse> {
   return out;
 }
 
-export function loadBuckets(): SeedBucket[] {
+/** Buckets are scoped to one Academic Year — ANU holds a student to the
+ *  requirements of the year they commenced, and the same bucket `key`
+ *  (e.g. "compulsory") recurs once per year with different units and
+ *  membership. `academicYear` picks which year's rule set to load. */
+export function loadBuckets(academicYear: AcademicYear): SeedBucket[] {
   const membersByBucket = new Map<string, string[]>();
-  for (const row of db.select().from(bucketMembers).all()) {
+  for (const row of db
+    .select()
+    .from(bucketMembers)
+    .where(eq(bucketMembers.academicYear, academicYear))
+    .all()) {
     const list = membersByBucket.get(row.bucketKey) ?? [];
     list.push(row.courseCode);
     membersByBucket.set(row.bucketKey, list);
@@ -74,9 +83,11 @@ export function loadBuckets(): SeedBucket[] {
   return db
     .select()
     .from(buckets)
+    .where(eq(buckets.academicYear, academicYear))
     .all()
     .map((row) => ({
       key: row.key,
+      academicYear: row.academicYear as AcademicYear,
       label: row.label,
       minUnits: row.minUnits,
       capUnits: row.capUnits,
@@ -87,6 +98,7 @@ export function loadBuckets(): SeedBucket[] {
       subjects: row.subjects ? row.subjects.split(",") : [],
       minLevel: row.minLevel,
       maxLevel: row.maxLevel,
+      includeSpecialisationMembers: row.includeSpecialisationMembers,
       sortOrder: row.sortOrder,
     }))
     .sort((a, b) => a.sortOrder - b.sortOrder);

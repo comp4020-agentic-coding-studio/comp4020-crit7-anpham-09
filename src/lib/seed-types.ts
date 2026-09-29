@@ -29,8 +29,24 @@ export interface SeedCourse {
 export type BucketKind = "list" | "predicate";
 export type BucketMode = "consuming" | "overlay";
 
+/** ANU holds a student to the program requirements of the Academic Year they
+ *  commenced, and the Master of Computing's requirements differ structurally
+ *  by year — not just renumbered courses, but a floor becoming a ceiling
+ *  (`project`) and a predicate widening (`comp8000`, 2024 only). So a bucket
+ *  is scoped to exactly one year; the same `key` recurs once per year it
+ *  applies to, each with its own units and membership. */
+export const ACADEMIC_YEARS = [2024, 2025, 2026] as const;
+export type AcademicYear = (typeof ACADEMIC_YEARS)[number];
+export const DEFAULT_ACADEMIC_YEAR: AcademicYear = 2026;
+
+export function isAcademicYear(value: number): value is AcademicYear {
+  return (ACADEMIC_YEARS as readonly number[]).includes(value);
+}
+
 export interface SeedBucket {
   key: string;
+  /** The Academic Year this bucket's rule applies to. */
+  academicYear: AcademicYear;
   label: string;
   /** Units required. A bucket below this is `unmet`. */
   minUnits: number;
@@ -49,6 +65,14 @@ export interface SeedBucket {
   subjects: string[];
   minLevel: number | null;
   maxLevel: number | null;
+  /** `predicate` buckets only. The 2024 8000-level-COMP overlay's rule text
+   *  widens to "or non-COMP courses included in the Specialisations" — 2025
+   *  and 2026 are COMP-only. When true, a course that fails the subject/level
+   *  predicate is still accepted if it's a member of the plan's chosen
+   *  specialisation, regardless of level. Inert on this seed's catalogue,
+   *  whose only specialisation happens to have no non-COMP members — but
+   *  structurally correct for when one does. */
+  includeSpecialisationMembers: boolean;
   /** Allocation order. Lower runs first; most specific first. */
   sortOrder: number;
 }
