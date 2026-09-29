@@ -31,9 +31,18 @@ await bootstrapDemoPlan();
         Plans are for the {PROGRAM_LABEL}. There is no login: the plan's
         address is the only way back into it, so keep the link.
       </p>
+      <p id="commencementYearHint">
+        ANU holds you to the program requirements of the Academic Year you
+        commenced, not the current one — pick the year your plan should
+        follow.
+      </p>
       <form method="post" action="/api/plans">
         <label for="commencementYear">Commencement year</label>
-        <select id="commencementYear" name="commencementYear">
+        <select
+          id="commencementYear"
+          name="commencementYear"
+          aria-describedby="commencementYearHint"
+        >
           {
             ACADEMIC_YEARS.map((year) => (
               <option value={year} selected={year === DEFAULT_ACADEMIC_YEAR}>
@@ -42,11 +51,6 @@ await bootstrapDemoPlan();
             ))
           }
         </select>
-        <p>
-          ANU holds you to the program requirements of the Academic Year you
-          commenced, not the current one — pick the year your plan should
-          follow.
-        </p>
         <button>Start a plan</button>
       </form>
       <p>

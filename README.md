@@ -61,7 +61,8 @@ catalogue table, so only the wider catalogue is out of scope.
 1. **Program-enrolment clauses are dropped.** Every plan here is a Master of
    Computing plan, so "must be enrolled in the Master of Computing" is
    satisfied by construction. Where that was the *only* requirement
-   (COMP6390, COMP8280, MATH6005), the structured rule is empty.
+   (COMP6250, COMP6390, COMP8260, COMP8280, MATH6005), the structured
+   rule is empty.
 2. **Out-of-catalogue codes are dropped only where they are OR-options** —
    one alternative among several — though the full prose alongside still
    shows them. A plan can only ever contain a course this catalogue knows,
