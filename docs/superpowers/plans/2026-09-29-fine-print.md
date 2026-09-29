@@ -1086,7 +1086,7 @@ const CATALOGUE = new Map<string, SeedCourse>(
 );
 
 // Resolved dynamically below, so the type cannot be known statically.
-let evaluateItem: (...args: never[]) => any;
+let evaluateItem: (...args: any[]) => any;
 
 beforeAll(async () => {
   expect(existsSync(new URL(`${ELIGIBILITY}.ts`, import.meta.url))).toBe(true);
@@ -1384,7 +1384,7 @@ Then append the following. A second `beforeAll` in the same file is fine — Vit
 const PROGRESS = "../src/lib/rules/progress";
 
 // Resolved dynamically below, so the type cannot be known statically.
-let evaluateProgress: (...args: never[]) => any;
+let evaluateProgress: (...args: any[]) => any;
 
 beforeAll(async () => {
   expect(existsSync(new URL(`${PROGRESS}.ts`, import.meta.url))).toBe(true);
@@ -2409,9 +2409,9 @@ import { beforeAll, describe, expect, it } from "vitest";
 const SCRAPER = "./scrape-pc";
 
 // Resolved dynamically below.
-let extractPrereqs: (...args: never[]) => any;
+let extractPrereqs: (...args: any[]) => any;
 // Resolved dynamically below.
-let extractUnits: (...args: never[]) => any;
+let extractUnits: (...args: any[]) => any;
 
 beforeAll(async () => {
   expect(existsSync(new URL(`${SCRAPER}.ts`, import.meta.url))).toBe(true);
