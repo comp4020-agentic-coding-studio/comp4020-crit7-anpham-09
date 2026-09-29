@@ -24,6 +24,7 @@
 - **Astro eats whitespace between a text node and a following element** — write `is{" "}` before a link. Existing `CLAUDE.md` rule.
 - **Add every new page to `spec/routes.ts`** or the invariants silently stop covering it.
 - **No new runtime dependencies.** Everything below uses what `package.json` already ships.
+- **A test that POSTs to an API route must send an `origin` header matching the server.** `astro.config.ts` sets `security.allowedDomains`, and Astro's CSRF check returns **403** for a form POST without a matching `Origin`. Verified empirically against the built server: no header → 403; `origin: baseUrl` → 303. A browser sends this automatically, so only the tests need it.
 - **Colour only ever comes from a custom property.** No literal hex in a rule body; dark mode is one `prefers-color-scheme` block redefining the tokens. Existing `CLAUDE.md` rule.
 - **Judge colour separation in OKLab**, not RGB or hue angle. Existing `CLAUDE.md` rule.
 - **Every transition and animation needs a `prefers-reduced-motion` escape.** Existing `CLAUDE.md` rule.
@@ -1907,6 +1908,10 @@ const baseUrl = inject("baseUrl");
 async function createPlan(): Promise<string> {
   const res = await fetch(`${baseUrl}/api/plans`, {
     method: "POST",
+    // Astro's CSRF check rejects a form POST with no matching Origin — a
+    // request without this header gets 403, not 303. Verified against the
+    // built server.
+    headers: { origin: baseUrl },
     redirect: "manual",
   });
   expect(res.status).toBe(303);
@@ -1934,6 +1939,7 @@ describe("a plan", () => {
     });
     const post = await fetch(`${baseUrl}/api/plan-items`, {
       method: "POST",
+      headers: { origin: baseUrl },
       body: form,
       redirect: "manual",
     });
