@@ -1,0 +1,158 @@
+---
+import { PROGRAM_LABEL, PROGRAM_TOTAL_UNITS } from "../../lib/db";
+import { loadBuckets, loadCatalogue, loadSpecialisation } from "../../lib/catalogue";
+import { findPlan, listItemRows, listItems } from "../../lib/plans";
+import { evaluatePlan } from "../../lib/rules/eligibility";
+import { evaluateProgress } from "../../lib/rules/progress";
+import { bucketUnitsLabel } from "../../lib/bucket-display";
+import "../../styles.css";
+
+const { slug } = Astro.params;
+const plan = slug ? findPlan(slug) : undefined;
+if (!plan) {
+  return new Response("No such plan", { status: 404 });
+}
+
+const catalogue = loadCatalogue();
+const buckets = loadBuckets();
+const specialisation = loadSpecialisation(plan.specialisationKey);
+
+const rows = listItemRows(plan.id);
+const items = listItems(plan.id);
+const verdicts = new Map(
+  evaluatePlan(items, catalogue).map((v) => [`${v.code}@${v.term}`, v]),
+);
+const progress = evaluateProgress(
+  items,
+  catalogue,
+  buckets,
+  specialisation?.members ?? [],
+  PROGRAM_TOTAL_UNITS,
+);
+
+const terms = [...new Set(rows.map((r) => r.term))].sort();
+---
+
+<!doctype html>
+<html lang="en-AU">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{`Plan ${plan.slug} — Fine Print`}</title>
+  </head>
+  <body>
+    <nav aria-label="site">
+      <a href="/">Plan</a>
+      <a href="/readme/">About</a>
+    </nav>
+    <main>
+      <h1>{`Plan ${plan.slug}`}</h1>
+      <p>
+        {PROGRAM_LABEL}, {specialisation?.label ?? "no specialisation"}. This
+        page is the only way back in, so keep the address.
+      </p>
+
+      <section aria-labelledby="courses">
+        <h2 id="courses">Courses</h2>
+        {terms.length === 0 && <p>Nothing planned yet. Add a course below.</p>}
+        {
+          terms.map((term) => (
+            <article>
+              <h3>{term}</h3>
+              <ul>
+                {rows
+                  .filter((row) => row.term === term)
+                  .map((row) => {
+                    const verdict = verdicts.get(`${row.courseCode}@${row.term}`);
+                    const course = catalogue.get(row.courseCode);
+                    return (
+                      <li>
+                        <strong>{row.courseCode}</strong>{" "}
+                        {course?.title ?? "not in the catalogue"}
+                        {row.status === "completed" && <span> — completed</span>}
+                        {verdict && verdict.reasons.length > 0 && (
+                          <ul>
+                            {verdict.reasons.map((reason) => (
+                              <li data-severity={reason.severity}>
+                                {reason.severity === "blocking" ? "Blocked: " : "Note: "}
+                                {reason.text}
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                        <form method="post" action="/api/plan-items">
+                          <input type="hidden" name="plan" value={plan.slug} />
+                          <input type="hidden" name="item" value={row.id} />
+                          <input type="hidden" name="action" value="remove" />
+                          <button class="remove-button">Remove {row.courseCode}</button>
+                        </form>
+                      </li>
+                    );
+                  })}
+              </ul>
+            </article>
+          ))
+        }
+      </section>
+
+      <section aria-labelledby="add">
+        <h2 id="add">Add a course</h2>
+        <form method="post" action="/api/plan-items">
+          <input type="hidden" name="plan" value={plan.slug} />
+          <label for="course">Course code</label>
+          <input id="course" name="course" required pattern="[A-Za-z]{4}[0-9]{4}" placeholder="COMP8410" />
+          <label for="term">Term</label>
+          <input id="term" name="term" required pattern="[0-9]{4}-S[12]" placeholder="2027-S1" />
+          <label for="status">Status</label>
+          <select id="status" name="status">
+            <option value="planned">Planned</option>
+            <option value="completed">Already completed</option>
+          </select>
+          <button>Add</button>
+        </form>
+      </section>
+
+      <section aria-labelledby="progress">
+        <h2 id="progress">Degree progress</h2>
+        <p>
+          {progress.totalUnits} of {progress.requiredTotal} units.
+          {progress.complete ? " This plan completes the degree." : " Not yet complete."}
+        </p>
+        <table>
+          <caption>Requirement buckets, and which courses landed in each</caption>
+          <thead>
+            <tr>
+              <th scope="col">Requirement</th>
+              <th scope="col">Units</th>
+              <th scope="col">Status</th>
+              <th scope="col">Courses</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              progress.buckets.map((bucket) => (
+                <tr>
+                  <th scope="row">
+                    {bucket.label}
+                    {bucket.mode === "overlay" && <span> (counted across the plan)</span>}
+                  </th>
+                  <td>{bucketUnitsLabel(bucket)}</td>
+                  <td data-status={bucket.status}>{bucket.status}</td>
+                  <td>{bucket.courses.join(", ") || "—"}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+        {
+          progress.unallocated.length > 0 && (
+            <p>
+              Counting toward nothing: {progress.unallocated.join(", ")}. A
+              requirement that caps its units will not absorb the surplus.
+            </p>
+          )
+        }
+      </section>
+    </main>
+  </body>
+</html>

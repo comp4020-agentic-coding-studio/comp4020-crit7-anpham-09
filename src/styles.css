@@ -38,3 +38,56 @@ button {
 #messages {
   padding-inline-start: 1.2rem;
 }
+
+:root {
+  --colour-blocking: oklch(0.52 0.19 25);
+  --colour-warning: oklch(0.55 0.12 75);
+  --colour-rule: oklch(0.87 0 0);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --colour-blocking: oklch(0.72 0.16 25);
+    --colour-warning: oklch(0.78 0.11 75);
+    --colour-rule: oklch(0.35 0 0);
+  }
+}
+
+/* Severity is carried in the markup, not in colour alone: each reason is
+   prefixed with "Blocked:" or "Note:" in the text, so the distinction
+   survives greyscale and a screen reader. Colour is reinforcement. */
+[data-severity="blocking"] {
+  border-left: 3px solid var(--colour-blocking);
+  padding-left: 0.6rem;
+}
+[data-severity="warning"] {
+  border-left: 3px solid var(--colour-warning);
+  padding-left: 0.6rem;
+}
+[data-status="unmet"],
+[data-status="exceeded"] {
+  font-weight: 600;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+th,
+td {
+  border-bottom: 1px solid var(--colour-rule);
+  padding: 0.4rem 0.5rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+/* WCAG 2.5.5: every interactive target clears a 44x44px hit area, whole box
+   included. The remove buttons carry short text ("Remove COMP8020") that
+   would otherwise size well under that on its own. */
+button {
+  min-height: 44px;
+  min-width: 44px;
+}
+.remove-button {
+  min-height: 44px;
+  padding-inline: 0.8rem;
+}
