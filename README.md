@@ -1,18 +1,21 @@
-# Your prototype
+# Fine Print
 
-<!-- TEMPLATE: this file is yours, and the deployed app publishes it in full at
-     /readme/ --- a visitor reads it before they touch the app, and so does the
-     marker. Replace everything in it, this comment included. -->
+A Master of Computing (7706) study planner that validates while you plan,
+instead of after you commit.
 
-What this is, in a paragraph: the thing, and what it's for.
+ANU's Programs and Courses holds every rule about what you may enrol in, and
+ISIS enforces them. Both know, at the moment you pick a course, whether you
+are eligible and whether your plan will graduate you. Neither tells you then.
+Fine Print is that same data, surfaced at the moment it is useful.
 
 ## What good looks like here
 
-Say what good means for this app: what you decided, what you read or looked at
-while deciding, and what you chose not to build. The rules that decision
-produced live in `CLAUDE.md` and the checks that protect it live in `spec/`;
-this is the argument they came from, so say which parts of good are enforced and
-which are judgement calls.
+Good is that no blocked course is ever shown without its reason. A bare "not
+eligible" is the failure being replaced, so every verdict names what blocks
+it: which prerequisite, which session, which permission code.
 
-Images go in `public/` and are linked relatively --- `![alt](public/before.png)`
---- which renders on GitHub and at `/readme/` alike.
+Good is also failing closed. An app whose claim is that it tells the truth
+must never silently pass — a course the catalogue does not know is reported
+as unknown, never as fine.
+
+This README is a first draft and is rewritten in Task 8.
