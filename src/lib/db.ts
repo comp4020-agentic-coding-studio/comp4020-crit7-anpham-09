@@ -137,3 +137,10 @@ export const PROGRAM_CODE = seed.program.code;
 export const PROGRAM_LABEL = seed.program.label;
 export const PROGRAM_TOTAL_UNITS = seed.program.totalUnits;
 export const DEFAULT_SPECIALISATION = "human-centred-and-creative-computing";
+
+// Deferred: plans.ts imports from this module, so the call cannot sit at the
+// top level of the import graph.
+export async function bootstrapDemoPlan(): Promise<void> {
+  const { ensureDemoPlan } = await import("./plans");
+  ensureDemoPlan();
+}

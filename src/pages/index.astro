@@ -1,5 +1,9 @@
 ---
+import { bootstrapDemoPlan, PROGRAM_LABEL } from "../lib/db";
+import { DEMO_SLUG } from "../lib/plans";
 import "../styles.css";
+
+await bootstrapDemoPlan();
 ---
 
 <!doctype html>
@@ -12,13 +16,27 @@ import "../styles.css";
   <body>
     <nav aria-label="site">
       <a href="/">Plan</a>
+      <a href={`/plan/${DEMO_SLUG}`}>Example</a>
       <a href="/readme/">About</a>
     </nav>
     <main>
       <h1>Fine Print</h1>
       <p>
-        A Master of Computing planner that tells you why a course is blocked
-        while you are choosing it, not after you have built a plan around it.
+        Programs and Courses knows whether you may enrol in a course. ISIS
+        knows whether your plan will graduate you. Both tell you after you
+        have decided. This is the same data, at the moment it is useful.
+      </p>
+      <p>
+        Plans are for the {PROGRAM_LABEL}. There is no login: the plan's
+        address is the only way back into it, so keep the link.
+      </p>
+      <form method="post" action="/api/plans">
+        <button>Start a plan</button>
+      </form>
+      <p>
+        Or open the{" "}
+        <a href={`/plan/${DEMO_SLUG}`}>example plan</a> to see what a blocked
+        course looks like.
       </p>
     </main>
   </body>
