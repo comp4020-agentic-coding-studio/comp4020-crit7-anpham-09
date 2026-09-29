@@ -24,6 +24,13 @@
 - **Astro eats whitespace between a text node and a following element** — write `is{" "}` before a link. Existing `CLAUDE.md` rule.
 - **Add every new page to `spec/routes.ts`** or the invariants silently stop covering it.
 - **No new runtime dependencies.** Everything below uses what `package.json` already ships.
+- **Colour only ever comes from a custom property.** No literal hex in a rule body; dark mode is one `prefers-color-scheme` block redefining the tokens. Existing `CLAUDE.md` rule.
+- **Judge colour separation in OKLab**, not RGB or hue angle. Existing `CLAUDE.md` rule.
+- **Every transition and animation needs a `prefers-reduced-motion` escape.** Existing `CLAUDE.md` rule.
+- **No `100vh`** — mobile Safari's address bar makes it lie. Use `dvh` with a fallback. Existing `CLAUDE.md` rule.
+- **Interactive targets are at least 44x44px** (WCAG 2.5.5), counting the whole hit area. Existing `CLAUDE.md` rule.
+- **No web font.** Existing `CLAUDE.md` rule.
+- **Never tell a reviewer what not to flag.** Existing `CLAUDE.md` rule, and it cost this repo a missed finding in C5.
 - **Program modelled: Master of Computing, code `7706`, 96 units.**
 - **Never invent ANU data.** Every course title, unit value, session and requisite must come from a fetched Programs and Courses page. If a page was not fetched, do not guess the value — fetch it.
 
@@ -267,6 +274,14 @@ Create `src/lib/seed-types.ts`:
 
 export type Session = "S1" | "S2";
 
+/** One requirement. `options` is an OR — any of them satisfies the group.
+ *  `concurrent` true means the prerequisite may sit in the SAME term
+ *  ("completed or currently studying"); false means strictly earlier. */
+export interface PrereqGroup {
+  options: string[];
+  concurrent: boolean;
+}
+
 export interface SeedCourse {
   code: string;
   title: string;
@@ -277,9 +292,8 @@ export interface SeedCourse {
   requisiteNote: string;
   needsPermissionCode: boolean;
   sessions: Session[];
-  /** An AND of ORs: every group must be satisfied, and any code within a
-   *  group satisfies that group. */
-  prereqs: string[][];
+  /** An AND of ORs: every group must be satisfied. */
+  prereqs: PrereqGroup[];
 }
 
 export type BucketKind = "list" | "predicate";
@@ -362,7 +376,9 @@ describe("the committed seed", () => {
 
     // Every referenced code exists as a course.
     const referenced: string[] = [
-      ...seed.courses.flatMap((c: { prereqs: string[][] }) => c.prereqs.flat()),
+      ...seed.courses.flatMap((c: { prereqs: { options: string[] }[] }) =>
+        c.prereqs.flatMap((g) => g.options),
+      ),
       ...seed.buckets.flatMap((b: { members: string[] }) => b.members),
       ...seed.specialisations.flatMap((s: { members: string[] }) => s.members),
     ];
@@ -402,9 +418,21 @@ pnpm test -- spec/seed.test.ts
 
 Expected: FAIL — `src/data/seed.json` does not exist.
 
-- [ ] **Step 4: Fetch the course pages you have not already read**
+- [ ] **Step 4: Use the verified data — do not re-fetch**
 
-Do not guess any value. Fetch each of these and read off the fields:
+**Every course's title, unit value, sessions, permission-code flag, verbatim
+requisite prose and structured `prereqs` have already been fetched from the
+live 2026 pages and checked. They are in:**
+
+`.superpowers/sdd/2026-09-29-fine-print/verified-course-data.md`
+
+Read that file and transcribe its 13 courses into `seed.json` exactly as given.
+It also records the three simplification rules applied when turning requisite
+prose into structure, and two places where Programs and Courses contradicts
+itself — all five facts belong in `README.md` at Task 8.
+
+Only if a value there looks wrong should you re-fetch the page it came from.
+The original URLs, for reference:
 
 ```
 https://programsandcourses.anu.edu.au/2026/course/comp6120
@@ -454,7 +482,7 @@ Create `src/data/seed.json`. **COMP8020 below is fully verified** — its page w
       "requisiteNote": "To enrol in this course, you must have completed COMP6390. Additional Prerequisite courses for the Advanced Topic will be listed on the SoCo website when the course topic is announced. Students who meet the prerequisites can request a permission code from the College.",
       "needsPermissionCode": true,
       "sessions": ["S2"],
-      "prereqs": [["COMP6390"]]
+      "prereqs": [{ "options": ["COMP6390"], "concurrent": false }]
     }
   ],
   "buckets": [
@@ -648,6 +676,8 @@ export const offerings = sqliteTable(
 export const prereqGroups = sqliteTable("prereq_groups", {
   id: int().primaryKey({ autoIncrement: true }),
   courseCode: text("course_code").notNull(),
+  /** True when the prerequisite may be taken in the same term. */
+  concurrent: int({ mode: "boolean" }).notNull().default(false),
 });
 
 export const prereqOptions = sqliteTable("prereq_options", {
@@ -798,10 +828,10 @@ function seedReferenceData(): void {
       for (const group of course.prereqs) {
         const row = tx
           .insert(prereqGroups)
-          .values({ courseCode: course.code })
+          .values({ courseCode: course.code, concurrent: group.concurrent })
           .returning()
           .get();
-        for (const option of group) {
+        for (const option of group.options) {
           tx.insert(prereqOptions)
             .values({ groupId: row.id, courseCode: option })
             .run();
@@ -875,6 +905,7 @@ import {
   specialisations,
 } from "./schema";
 import type {
+  PrereqGroup,
   SeedBucket,
   SeedCourse,
   SeedSpecialisation,
@@ -900,10 +931,13 @@ export function loadCatalogue(): Map<string, SeedCourse> {
     optionsByGroup.set(row.groupId, list);
   }
 
-  const groupsByCourse = new Map<string, string[][]>();
+  const groupsByCourse = new Map<string, PrereqGroup[]>();
   for (const row of db.select().from(prereqGroups).all()) {
     const list = groupsByCourse.get(row.courseCode) ?? [];
-    list.push(optionsByGroup.get(row.id) ?? []);
+    list.push({
+      options: optionsByGroup.get(row.id) ?? [],
+      concurrent: row.concurrent,
+    });
     groupsByCourse.set(row.courseCode, list);
   }
 
@@ -1038,7 +1072,14 @@ function course(code: string, over: Partial<SeedCourse> = {}): SeedCourse {
 const CATALOGUE = new Map<string, SeedCourse>(
   [
     course("COMP6390"),
-    course("COMP8020", { sessions: ["S2"], prereqs: [["COMP6390"]] }),
+    course("COMP8020", {
+      sessions: ["S2"],
+      prereqs: [{ options: ["COMP6390"], concurrent: false }],
+    }),
+    course("COMP6120", {
+      prereqs: [{ options: ["COMP6442"], concurrent: true }],
+    }),
+    course("COMP6442"),
     course("COMP8410", { sessions: ["S2"] }),
     course("COMP8600", { needsPermissionCode: true }),
   ].map((c) => [c.code, c]),
@@ -1112,6 +1153,21 @@ describe("eligibility", () => {
     const verdict = evaluateItem(items[0], CATALOGUE, items);
     const reason = verdict.reasons.find((r: { kind: string }) => r.kind === "overload");
     expect(reason.severity).toBe("warning");
+  });
+
+  it("allows a concurrent prerequisite in the same term", () => {
+    // COMP6120's real requisite reads "completed or be currently studying
+    // COMP6442", so the same term must satisfy it. Blocking here would be
+    // the app inventing a stricter rule than ANU's.
+    const items = [planned("COMP6442", "2026-S2"), planned("COMP6120", "2026-S2")];
+    const verdict = evaluateItem(items[1], CATALOGUE, items);
+    expect(verdict.reasons.filter((r: { kind: string }) => r.kind === "missing-prereq")).toHaveLength(0);
+  });
+
+  it("still blocks a concurrent prerequisite that is in a later term", () => {
+    const items = [planned("COMP6442", "2027-S1"), planned("COMP6120", "2026-S2")];
+    const verdict = evaluateItem(items[1], CATALOGUE, items);
+    expect(verdict.reasons.map((r: { kind: string }) => r.kind)).toContain("missing-prereq");
   });
 
   it("blocks a duplicate", () => {
@@ -1222,14 +1278,19 @@ export function evaluateItem(
   // Terms are `<year>-<session>`, so lexical order is chronological order.
   for (const group of course.prereqs) {
     const satisfied = all.some(
-      (other) => group.includes(other.courseCode) && other.term < item.term,
+      (other) =>
+        group.options.includes(other.courseCode) &&
+        (group.concurrent ? other.term <= item.term : other.term < item.term),
     );
     if (!satisfied) {
-      const options = group.join(" or ");
+      const options = group.options.join(" or ");
+      const when = group.concurrent
+        ? `by ${item.term} — it may be taken alongside`
+        : `before ${item.term}`;
       reasons.push({
         kind: "missing-prereq",
         severity: "blocking",
-        text: `${options} must be completed before ${item.term}.`,
+        text: `${options} must be completed ${when}.`,
       });
     }
   }
@@ -2122,16 +2183,35 @@ export const ROUTES = ["/", "/plan/demo", "/readme/"];
 
 Append to `src/styles.css`:
 
+**`CLAUDE.md` forbids a literal hex in a rule body — colour only ever comes
+from a custom property, and dark mode is one `prefers-color-scheme` block
+redefining the tokens.** Follow the token names already in `src/styles.css` if
+it defines any; otherwise add these to its `:root`.
+
 ```css
+:root {
+  --colour-blocking: oklch(0.52 0.19 25);
+  --colour-warning: oklch(0.55 0.12 75);
+  --colour-rule: oklch(0.87 0 0);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --colour-blocking: oklch(0.72 0.16 25);
+    --colour-warning: oklch(0.78 0.11 75);
+    --colour-rule: oklch(0.35 0 0);
+  }
+}
+
 /* Severity is carried in the markup, not in colour alone: each reason is
    prefixed with "Blocked:" or "Note:" in the text, so the distinction
    survives greyscale and a screen reader. Colour is reinforcement. */
 [data-severity="blocking"] {
-  border-left: 3px solid #b3261e;
+  border-left: 3px solid var(--colour-blocking);
   padding-left: 0.6rem;
 }
 [data-severity="warning"] {
-  border-left: 3px solid #8a6b00;
+  border-left: 3px solid var(--colour-warning);
   padding-left: 0.6rem;
 }
 [data-status="unmet"],
@@ -2144,12 +2224,16 @@ table {
 }
 th,
 td {
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--colour-rule);
   padding: 0.4rem 0.5rem;
   text-align: left;
   vertical-align: top;
 }
 ```
+
+The remove buttons must clear a 44x44px hit area (WCAG 2.5.5, and a
+`CLAUDE.md` rule). If the default button box is smaller, grow it with
+padding or an absolutely positioned `::after`.
 
 - [ ] **Step 7: Run everything**
 
@@ -2203,7 +2287,9 @@ Replace the Task 1 draft. It must cover, because `/readme/` is what a marker rea
 
 - The two modelling decisions — prerequisites are temporal, buckets constrain rather than partition — and why each is the honest reading of the program's rules.
 - The data provenance: transcribed from Programs and Courses, committed as `src/data/seed.json`, never scraped at runtime. **Say plainly whether Task 10 ran**; if it did not, say the seed is hand-transcribed and how many courses it covers.
-- The COMP7710 discrepancy: Programs and Courses calls it *Structured Programming* in the Program Requirements and *Programming Fundamentals* in the Study Options table. Say which you seeded and that the source disagrees with itself — it is a real artefact of the system being replaced.
+- **Two places Programs and Courses contradicts itself**, both recorded in `.superpowers/sdd/2026-09-29-fine-print/verified-course-data.md`: COMP7710 is *Programming Fundamentals* on its own page and in Study Options but *Structured Programming* in the Program Requirements; MATH6005 is *Discrete Mathematical Models* on its own page but *Discrete Mathematics Models* in the Program Requirements. Both were seeded from the course's own page. Say so — a system that disagrees with itself about the name of a compulsory course is exactly the kind of thing this app exists to surface.
+- **The three simplifications applied to requisite prose** (program-enrolment clauses dropped as satisfied by construction, out-of-catalogue option codes dropped, incompatibility rules not modelled at all). The app's claim is that it does not hide things, so these must be stated, not buried.
+- That the specialisation member list is partial.
 - The cut list from the spec, as cuts you made rather than things you ran out of time for.
 
 - [ ] **Step 3: Write `PROCESS.md`**
@@ -2307,17 +2393,32 @@ beforeAll(async () => {
 describe("the Programs and Courses parser", () => {
   it("pulls a single prerequisite out of the prose", () => {
     const prose = "To enrol in this course, you must have completed COMP6390.";
-    expect(extractPrereqs(prose)).toEqual([["COMP6390"]]);
+    expect(extractPrereqs(prose)).toEqual([
+      { options: ["COMP6390"], concurrent: false },
+    ]);
   });
 
   it("reads an OR group as one group with two options", () => {
     const prose = "You must have completed COMP1100 or COMP1130.";
-    expect(extractPrereqs(prose)).toEqual([["COMP1100", "COMP1130"]]);
+    expect(extractPrereqs(prose)).toEqual([
+      { options: ["COMP1100", "COMP1130"], concurrent: false },
+    ]);
   });
 
   it("reads an AND of two requirements as two groups", () => {
     const prose = "You must have completed COMP6262 and COMP6442.";
-    expect(extractPrereqs(prose)).toEqual([["COMP6262"], ["COMP6442"]]);
+    expect(extractPrereqs(prose)).toEqual([
+      { options: ["COMP6262"], concurrent: false },
+      { options: ["COMP6442"], concurrent: false },
+    ]);
+  });
+
+  it("marks 'or be currently studying' as concurrent", () => {
+    const prose =
+      "To enrol in this course you must have successfully completed or be currently studying COMP6442.";
+    expect(extractPrereqs(prose)).toEqual([
+      { options: ["COMP6442"], concurrent: true },
+    ]);
   });
 
   it("reads the unit value", () => {
