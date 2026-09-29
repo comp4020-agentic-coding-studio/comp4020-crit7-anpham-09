@@ -44,7 +44,7 @@ describe("catalogue: db-layer round trip", () => {
     const { loadCatalogue } = await bootAgainst(freshDbPath());
     const cat = loadCatalogue();
 
-    expect(cat.size).toBe(16);
+    expect(cat.size).toBe(72);
     expect(cat.size).toBe(seed.courses.length);
 
     for (const course of seed.courses) {
@@ -55,6 +55,7 @@ describe("catalogue: db-layer round trip", () => {
       expect(got!.subject).toBe(course.subject);
       expect(got!.requisiteNote).toBe(course.requisiteNote);
       expect(got!.needsPermissionCode).toBe(course.needsPermissionCode);
+      expect(got!.requisitesModelled, course.code).toBe(course.requisitesModelled);
       expect([...got!.sessions].sort()).toEqual([...course.sessions].sort());
       expect(got!.prereqs.length, course.code).toBe(course.prereqs.length);
       for (let i = 0; i < course.prereqs.length; i++) {
@@ -130,7 +131,7 @@ describe("catalogue: db-layer round trip", () => {
     const dbPath = freshDbPath();
 
     const first = await bootAgainst(dbPath);
-    expect(first.loadCatalogue().size).toBe(16);
+    expect(first.loadCatalogue().size).toBe(72);
     expect(first.loadBuckets(2026).length).toBe(7);
     const firstMeta = first.db.select().from(first.seedMeta).all();
     expect(firstMeta.length).toBe(1);
@@ -138,7 +139,7 @@ describe("catalogue: db-layer round trip", () => {
     // Fresh module graph, same underlying file: the module-scope
     // `seedReferenceData()` call runs again on import.
     const second = await bootAgainst(dbPath);
-    expect(second.loadCatalogue().size).toBe(16);
+    expect(second.loadCatalogue().size).toBe(72);
     expect(second.loadBuckets(2026).length).toBe(7);
     const secondMeta = second.db.select().from(second.seedMeta).all();
     expect(secondMeta.length).toBe(1);

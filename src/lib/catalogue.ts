@@ -59,6 +59,7 @@ export function loadCatalogue(): Map<string, SeedCourse> {
       needsPermissionCode: row.needsPermissionCode,
       sessions: sessionsByCourse.get(row.code) ?? [],
       prereqs: groupsByCourse.get(row.code) ?? [],
+      requisitesModelled: row.requisitesModelled,
     });
   }
   return out;

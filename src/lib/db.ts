@@ -70,6 +70,7 @@ function seedReferenceData(): void {
           level: levelOf(course.code),
           requisiteNote: course.requisiteNote,
           needsPermissionCode: course.needsPermissionCode,
+          requisitesModelled: course.requisitesModelled,
         })
         .run();
       for (const session of course.sessions) {

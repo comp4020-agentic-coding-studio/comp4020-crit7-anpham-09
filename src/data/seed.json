@@ -6,14 +6,37 @@
   },
   "courses": [
     {
+      "code": "COMP6034",
+      "title": "Network Security",
+      "units": 6,
+      "subject": "COMP",
+      "requisiteNote": "To enrol in this course, you must be enrolled in the Master of Computing (Advanced) and have completed COMP6800 or COMP2700 Incompatible with COMP3704",
+      "needsPermissionCode": false,
+      "sessions": [
+        "S2"
+      ],
+      "prereqs": [],
+      "requisitesModelled": false
+    },
+    {
       "code": "COMP6120",
       "title": "Software Engineering",
       "units": 6,
       "subject": "COMP",
       "requisiteNote": "To enrol in this course you must have successfully completed or be currently studying COMP6442 or COMP2100. Incompatible with COMP2120.",
       "needsPermissionCode": false,
-      "sessions": ["S2"],
-      "prereqs": [{ "options": ["COMP6442"], "concurrent": true }]
+      "sessions": [
+        "S2"
+      ],
+      "prereqs": [
+        {
+          "options": [
+            "COMP6442"
+          ],
+          "concurrent": true
+        }
+      ],
+      "requisitesModelled": true
     },
     {
       "code": "COMP6240",
@@ -22,8 +45,25 @@
       "subject": "COMP",
       "requisiteNote": "You are not able to enrol in this course if you have successfully completed COMP2400. Incompatible with COMP7240.",
       "needsPermissionCode": false,
-      "sessions": ["S1", "S2"],
-      "prereqs": []
+      "sessions": [
+        "S1",
+        "S2"
+      ],
+      "prereqs": [],
+      "requisitesModelled": true
+    },
+    {
+      "code": "COMP6242",
+      "title": "Deep Learning",
+      "units": 6,
+      "subject": "COMP",
+      "requisiteNote": "To enrol in this course you must have successfully completed: ( COMP3670 or COMP6670 or COMP8410 ) AND ( COMP1110 or COMP6710 or COMP7710 or COMP1730 or COMP6730 ).",
+      "needsPermissionCode": false,
+      "sessions": [
+        "S1"
+      ],
+      "prereqs": [],
+      "requisitesModelled": false
     },
     {
       "code": "COMP6250",
@@ -32,8 +72,11 @@
       "subject": "COMP",
       "requisiteNote": "To enrol in this course you must be enrolled in Graduate Diploma of Computing or Master of Computing or Master of Computing (Advanced) or Master of Machine Learning and Computer Vision.",
       "needsPermissionCode": false,
-      "sessions": ["S1"],
-      "prereqs": []
+      "sessions": [
+        "S1"
+      ],
+      "prereqs": [],
+      "requisitesModelled": true
     },
     {
       "code": "COMP6260",
@@ -42,8 +85,126 @@
       "subject": "COMP",
       "requisiteNote": "Incompatible with COMP1600",
       "needsPermissionCode": false,
-      "sessions": ["S2"],
-      "prereqs": []
+      "sessions": [
+        "S2"
+      ],
+      "prereqs": [],
+      "requisitesModelled": true
+    },
+    {
+      "code": "COMP6261",
+      "title": "Information Theory",
+      "units": 6,
+      "subject": "COMP",
+      "requisiteNote": "You cannot enrol in this course if you have completed COMP2610 or ENGN8534 .",
+      "needsPermissionCode": false,
+      "sessions": [
+        "S2"
+      ],
+      "prereqs": [],
+      "requisitesModelled": false
+    },
+    {
+      "code": "COMP6262",
+      "title": "Logic",
+      "units": 6,
+      "subject": "COMP",
+      "requisiteNote": "You are not able to enrol in this course if you have previously completed PHIL2080 or COMP2620 .",
+      "needsPermissionCode": false,
+      "sessions": [
+        "S1"
+      ],
+      "prereqs": [],
+      "requisitesModelled": false
+    },
+    {
+      "code": "COMP6300",
+      "title": "Computer Architecture",
+      "units": 6,
+      "subject": "COMP",
+      "requisiteNote": "To enrol in this course you must be: studying a Master of Computing OR Master of Computing (Advanced) OR have completed COMP6710 OR COMP7710 OR COMP1110 . Incompatible with COMP2300 , ENGN2219 and COMP6719 .",
+      "needsPermissionCode": false,
+      "sessions": [
+        "S1"
+      ],
+      "prereqs": [],
+      "requisitesModelled": false
+    },
+    {
+      "code": "COMP6310",
+      "title": "Systems, Networks and Concurrency",
+      "units": 6,
+      "subject": "COMP",
+      "requisiteNote": "To enrol in this course you must have completed: COMP6300 AND ( COMP6710 or COMP7710 or COMP1110 ) Incompatible with COMP2310 .",
+      "needsPermissionCode": false,
+      "sessions": [
+        "S2"
+      ],
+      "prereqs": [],
+      "requisitesModelled": false
+    },
+    {
+      "code": "COMP6320",
+      "title": "Artificial Intelligence",
+      "units": 6,
+      "subject": "COMP",
+      "requisiteNote": "To enrol in this course you must have completed ( COMP6710 OR COMP7710 OR COMP1110 OR be enrolled in Master of Computing (Advanced)) AND have completed or be currently enrolled in COMP6262 OR COMP2620 Incompatible with COMP3620 .",
+      "needsPermissionCode": false,
+      "sessions": [
+        "S1"
+      ],
+      "prereqs": [],
+      "requisitesModelled": false
+    },
+    {
+      "code": "COMP6330",
+      "title": "Operating Systems Implementation",
+      "units": 6,
+      "subject": "COMP",
+      "requisiteNote": "To enrol in this course you must be: studying a Master of Computing (Advanced) OR be enrolled in or have completed COMP6300 or have completed COMP2300 or ENGN2219 . Incompatible with COMP3300 .",
+      "needsPermissionCode": false,
+      "sessions": [
+        "S2"
+      ],
+      "prereqs": [],
+      "requisitesModelled": false
+    },
+    {
+      "code": "COMP6331",
+      "title": "Computer Networks",
+      "units": 6,
+      "subject": "COMP",
+      "requisiteNote": "To enrol in this course you must have completed: ( COMP6710 OR COMP7710 OR COMP1110 OR COMP1140 ) OR ( COMP6310 OR COMP2310 ) OR ( COMP6442 OR COMP2100 ). Incompatible with COMP3310 , ENGN3539 , ENGN6539 .",
+      "needsPermissionCode": false,
+      "sessions": [
+        "S1"
+      ],
+      "prereqs": [],
+      "requisitesModelled": false
+    },
+    {
+      "code": "COMP6361",
+      "title": "Principles of Programming Languages",
+      "units": 6,
+      "subject": "COMP",
+      "requisiteNote": ".To enrol in this course you must have successfully completed COMP6710 and COMP6260 ; or be enrolled in Master of Computing (Advanced)",
+      "needsPermissionCode": false,
+      "sessions": [],
+      "prereqs": [],
+      "requisitesModelled": false
+    },
+    {
+      "code": "COMP6363",
+      "title": "Theory of Computation",
+      "units": 6,
+      "subject": "COMP",
+      "requisiteNote": "To enrol in this course you must be studying Master of Computing OR Master of Computing (Advanced). Incompatible with COMP3630 .",
+      "needsPermissionCode": false,
+      "sessions": [
+        "S1"
+      ],
+      "prereqs": [],
+      "requisitesModelled": false
     },
     {
       "code": "COMP6390",
@@ -52,8 +213,22 @@
       "subject": "COMP",
       "requisiteNote": "To enrol in this course you must: be studying Master of Computing OR Master of Computing Advanced OR have completed 6 units of (COMP6442 OR COMP6710 OR COMP6720). Incompatible with COMP3900.",
       "needsPermissionCode": false,
-      "sessions": ["S2"],
-      "prereqs": []
+      "sessions": [
+        "S2"
+      ],
+      "prereqs": [],
+      "requisitesModelled": true
+    },
+    {
+      "code": "COMP6434",
+      "title": "Data Wrangling",
+      "units": 6,
+      "subject": "COMP",
+      "requisiteNote": "To enrol in this course you must have completed: 6 units of ( COMP1110 or COMP1140 or COMP6730 or COMP6710 ) AND 6 units of ( COMP2400 or COMP6240 ). Incompatible with COMP3430 and COMP8930 .",
+      "needsPermissionCode": false,
+      "sessions": [],
+      "prereqs": [],
+      "requisitesModelled": false
     },
     {
       "code": "COMP6442",
@@ -62,11 +237,129 @@
       "subject": "COMP",
       "requisiteNote": "To enrol in this course you must have either: completed (COMP6710 OR COMP7710 OR COMP1110 OR COMP1140); AND have completed or be currently enrolled in (MATH6005 OR COMP6260 OR MATH1005 OR COMP1600); OR be enrolled in the Master of Machine Learning and Computer Vision AND have completed (COMP6710 or COMP7710 or COMP1110 or COMP1140) OR be enrolled in the Master of Computing (Advanced). Incompatible with COMP2100.",
       "needsPermissionCode": false,
-      "sessions": ["S1", "S2"],
+      "sessions": [
+        "S1",
+        "S2"
+      ],
       "prereqs": [
-        { "options": ["COMP6710", "COMP7710"], "concurrent": false },
-        { "options": ["MATH6005", "COMP6260"], "concurrent": true }
-      ]
+        {
+          "options": [
+            "COMP6710",
+            "COMP7710"
+          ],
+          "concurrent": false
+        },
+        {
+          "options": [
+            "MATH6005",
+            "COMP6260"
+          ],
+          "concurrent": true
+        }
+      ],
+      "requisitesModelled": true
+    },
+    {
+      "code": "COMP6445",
+      "title": "Computing Research Methods",
+      "units": 6,
+      "subject": "COMP",
+      "requisiteNote": "To enrol in this course you must be enrolled in Master of Computing (Advanced) (VCOMP) or Master of Machine Learning and Computer Vision (MMLCV). Incompatible with COMP2550 and COMP4450",
+      "needsPermissionCode": false,
+      "sessions": [
+        "S1"
+      ],
+      "prereqs": [],
+      "requisitesModelled": false
+    },
+    {
+      "code": "COMP6464",
+      "title": "High Performance Scientific Computing",
+      "units": 6,
+      "subject": "COMP",
+      "requisiteNote": "To enrol in this course you must: be studying Master of Computing or Master of Computing (Advanced) OR have successfully completed ( COMP6710 or COMP7710 or COMP1110 or COMP1140 ). Incompatible with COMP3320 .",
+      "needsPermissionCode": false,
+      "sessions": [
+        "S2"
+      ],
+      "prereqs": [],
+      "requisitesModelled": false
+    },
+    {
+      "code": "COMP6466",
+      "title": "Algorithms",
+      "units": 6,
+      "subject": "COMP",
+      "requisiteNote": "To enrol in this course you must: be studying Master of Computing or Master of Computing Advanced or have successfully completed ( COMP6710 or COMP7710 or COMP1110 or COMP1140 ). Incompatible with COMP3600 .",
+      "needsPermissionCode": false,
+      "sessions": [
+        "S2"
+      ],
+      "prereqs": [],
+      "requisitesModelled": false
+    },
+    {
+      "code": "COMP6470",
+      "title": "Special Topics in Computing",
+      "units": 6,
+      "subject": "COMP",
+      "requisiteNote": "You will need to contact the School of Computing to request a permission code to enrol in this course.",
+      "needsPermissionCode": true,
+      "sessions": [
+        "S1"
+      ],
+      "prereqs": [],
+      "requisitesModelled": false
+    },
+    {
+      "code": "COMP6490",
+      "title": "Document Analysis",
+      "units": 6,
+      "subject": "COMP",
+      "requisiteNote": "To enrol in this course you must be enrolled in VCOMP OR have completed 6 units of: ( COMP6240 /2400 OR COMP6260 /1600 OR COMP6442 /2100) AND have completed 6 units of: ( COMP6730 /1730 OR COMP6710 /1110). Incompatible with COMP4650 and COMP6990 .",
+      "needsPermissionCode": false,
+      "sessions": [
+        "S2"
+      ],
+      "prereqs": [],
+      "requisitesModelled": false
+    },
+    {
+      "code": "COMP6528",
+      "title": "Computer Vision",
+      "units": 6,
+      "subject": "COMP",
+      "requisiteNote": "To enrol in this course you must be studying one of: Graduate Diploma of Computing Master of Computing Master of Computing (Advanced). Master of Machine Learning and Computer Vision Incompatible with ENGN6528 and COMP4528 and ENGN4528 .",
+      "needsPermissionCode": false,
+      "sessions": [
+        "S1"
+      ],
+      "prereqs": [],
+      "requisitesModelled": false
+    },
+    {
+      "code": "COMP6540",
+      "title": "Game Development",
+      "units": 6,
+      "subject": "COMP",
+      "requisiteNote": "To enrol in this course you must be enrolled in Master of Computing Advanced OR have completed ( COMP6710 or COMP1110 or COMP1140 ).",
+      "needsPermissionCode": false,
+      "sessions": [],
+      "prereqs": [],
+      "requisitesModelled": false
+    },
+    {
+      "code": "COMP6670",
+      "title": "Introduction to Machine Learning",
+      "units": 6,
+      "subject": "COMP",
+      "requisiteNote": "To enrol in this course you must: be enrolled in Master of Computing (Advanced) OR have completed or be currently enrolled in ( COMP6710 or COMP7710 or COMP6730 ) OR have completed COMP1110 or COMP1140 . Incompatible with COMP3670 .",
+      "needsPermissionCode": false,
+      "sessions": [
+        "S2"
+      ],
+      "prereqs": [],
+      "requisitesModelled": false
     },
     {
       "code": "COMP6710",
@@ -75,8 +368,23 @@
       "subject": "COMP",
       "requisiteNote": "You are not able to enrol in this course if you have previously completed COMP1110 OR COMP1140 OR if you are enrolled in the Master of Computing (Advanced).",
       "needsPermissionCode": false,
-      "sessions": ["S1", "S2"],
-      "prereqs": []
+      "sessions": [
+        "S1",
+        "S2"
+      ],
+      "prereqs": [],
+      "requisitesModelled": true
+    },
+    {
+      "code": "COMP6720",
+      "title": "Art and Interaction Computing",
+      "units": 6,
+      "subject": "COMP",
+      "requisiteNote": "Incompatible with COMP1720",
+      "needsPermissionCode": false,
+      "sessions": [],
+      "prereqs": [],
+      "requisitesModelled": false
     },
     {
       "code": "COMP6730",
@@ -85,8 +393,35 @@
       "subject": "COMP",
       "requisiteNote": "You are not able to enrol in this course if you have successfully completed COMP1100, COMP1130, COMP1730, COMP6710 or COMP7710.",
       "needsPermissionCode": false,
-      "sessions": ["S2"],
-      "prereqs": []
+      "sessions": [
+        "S2"
+      ],
+      "prereqs": [],
+      "requisitesModelled": true
+    },
+    {
+      "code": "COMP6780",
+      "title": "Web Development and Design",
+      "units": 6,
+      "subject": "COMP",
+      "requisiteNote": "Incompatible with COMP1710 To enroll in this course students must be enrolled in a postgraduate program at ANU.",
+      "needsPermissionCode": false,
+      "sessions": [],
+      "prereqs": [],
+      "requisitesModelled": false
+    },
+    {
+      "code": "COMP6800",
+      "title": "Cyber Security Foundations",
+      "units": 6,
+      "subject": "COMP",
+      "requisiteNote": "To enrol in this course you must be enrolled in Masters of Computing (Advanced). Incompatible with COMP2700 .",
+      "needsPermissionCode": false,
+      "sessions": [
+        "S1"
+      ],
+      "prereqs": [],
+      "requisitesModelled": false
     },
     {
       "code": "COMP7710",
@@ -95,8 +430,25 @@
       "subject": "COMP",
       "requisiteNote": "You are not able to enrol in this course if you have previously completed or are currently enrolled in COMP1110 OR COMP1140 OR COMP6710. You will need to contact the School of Computing to request a permission code to enrol in this course.",
       "needsPermissionCode": true,
-      "sessions": ["S1", "S2"],
-      "prereqs": []
+      "sessions": [
+        "S1",
+        "S2"
+      ],
+      "prereqs": [],
+      "requisitesModelled": true
+    },
+    {
+      "code": "COMP8011",
+      "title": "Advanced Topics in Formal Methods and Programming Languages",
+      "units": 6,
+      "subject": "COMP",
+      "requisiteNote": "To enrol in this course you must have successfully completed 12 units of 6000-level COMP courses. Additional Prerequisite courses for the Advanced Topic will be listed on the SoCo website when the course topic is announced. Students who meet the pre-requisites can request a permission code following the instructions Enrolling in CECC courses. You will need to contact the School of Computing to request a permission code to enrol in this course.",
+      "needsPermissionCode": true,
+      "sessions": [
+        "S2"
+      ],
+      "prereqs": [],
+      "requisitesModelled": false
     },
     {
       "code": "COMP8020",
@@ -105,8 +457,42 @@
       "subject": "COMP",
       "requisiteNote": "To enrol in this course, you must have completed COMP6390. Additional Prerequisite courses for the Advanced Topic will be listed on the SoCo website when the course topic is announced. Students who meet the prerequisites can request a permission code from the College. You will need to contact the School of Computing to request a permission code to enrol in this course.",
       "needsPermissionCode": true,
-      "sessions": ["S2"],
-      "prereqs": [{ "options": ["COMP6390"], "concurrent": false }]
+      "sessions": [
+        "S2"
+      ],
+      "prereqs": [
+        {
+          "options": [
+            "COMP6390"
+          ],
+          "concurrent": false
+        }
+      ],
+      "requisitesModelled": true
+    },
+    {
+      "code": "COMP8045",
+      "title": "Advanced Topics in Computer Systems &amp; Architecture",
+      "units": 6,
+      "subject": "COMP",
+      "requisiteNote": "To enrol in this course you must have successfully completed 12 units of 6000-level COMP coded courses. Additional Prerequisite courses for the Advanced Topic will be listed on the SoCo website when the course topic is announced. Students who meet the pre-requisites can request a permission code following the instructions on Enrolling in CSS courses. You will need to contact the School of Computing to request a permission code to enrol in this course.",
+      "needsPermissionCode": true,
+      "sessions": [
+        "S2"
+      ],
+      "prereqs": [],
+      "requisitesModelled": false
+    },
+    {
+      "code": "COMP8131",
+      "title": "Managing Software Quality and Process",
+      "units": 6,
+      "subject": "COMP",
+      "requisiteNote": "To enrol in this course you must be enrolled in the Masters of Computing Advanced (VCOMP) and have successfully completed COMP6800 Cyber Security Foundations. Incompatible with COMP4130 .",
+      "needsPermissionCode": false,
+      "sessions": [],
+      "prereqs": [],
+      "requisitesModelled": false
     },
     {
       "code": "COMP8260",
@@ -115,8 +501,11 @@
       "subject": "COMP",
       "requisiteNote": "To enrol in this course you must be enrolled in the Graduate Diploma of Computing or Master of Computing or Master of Computing (Advanced) or Master of Machine Learning and Computer Vision.",
       "needsPermissionCode": false,
-      "sessions": ["S2"],
-      "prereqs": []
+      "sessions": [
+        "S2"
+      ],
+      "prereqs": [],
+      "requisitesModelled": true
     },
     {
       "code": "COMP8280",
@@ -125,8 +514,34 @@
       "subject": "COMP",
       "requisiteNote": "To enrol in this course you must be enrolled in the Graduate Diploma of Computing or Master of Computing or Master of Computing (Advanced) or Master of Machine Learning and Computer Vision. Incompatible with COMP8260, ENGN8260 and ENGN8280.",
       "needsPermissionCode": false,
-      "sessions": ["S1", "S2"],
-      "prereqs": []
+      "sessions": [
+        "S1",
+        "S2"
+      ],
+      "prereqs": [],
+      "requisitesModelled": true
+    },
+    {
+      "code": "COMP8300",
+      "title": "Parallel Systems",
+      "units": 6,
+      "subject": "COMP",
+      "requisiteNote": "To enrol in this course you must have completed: COMP6310 /2310 OR COMP6330 /3300 OR COMP6331 /3310 OR COMP6464 OR ENGN6539 Incompatible with COMP4300 .",
+      "needsPermissionCode": false,
+      "sessions": [],
+      "prereqs": [],
+      "requisitesModelled": false
+    },
+    {
+      "code": "COMP8350",
+      "title": "Sound and Music Computing",
+      "units": 6,
+      "subject": "COMP",
+      "requisiteNote": "To enrol in this course you must have completed either COMP6390 or COMP6720 . Incompatible with COMP4350 .",
+      "needsPermissionCode": false,
+      "sessions": [],
+      "prereqs": [],
+      "requisitesModelled": false
     },
     {
       "code": "COMP8410",
@@ -135,11 +550,125 @@
       "subject": "COMP",
       "requisiteNote": "To enrol in this course you must have completed COMP7240 or COMP6240 or COMP2400; and COMP6730 or COMP7230 or COMP6710. Incompatible with COMP3420 and COMP3425 and COMP8400 and COMP8910.",
       "needsPermissionCode": false,
-      "sessions": ["S1"],
+      "sessions": [
+        "S1"
+      ],
       "prereqs": [
-        { "options": ["COMP6240"], "concurrent": false },
-        { "options": ["COMP6730", "COMP6710"], "concurrent": false }
-      ]
+        {
+          "options": [
+            "COMP6240"
+          ],
+          "concurrent": false
+        },
+        {
+          "options": [
+            "COMP6730",
+            "COMP6710"
+          ],
+          "concurrent": false
+        }
+      ],
+      "requisitesModelled": true
+    },
+    {
+      "code": "COMP8460",
+      "title": "Advanced Algorithms",
+      "units": 6,
+      "subject": "COMP",
+      "requisiteNote": "To enrol in this course, you must have completed COMP6466 or COMP3600 . Incompatible with COMP4600 .",
+      "needsPermissionCode": false,
+      "sessions": [
+        "S1"
+      ],
+      "prereqs": [],
+      "requisitesModelled": false
+    },
+    {
+      "code": "COMP8500",
+      "title": "Advanced Computing Team Project",
+      "units": 12,
+      "subject": "COMP",
+      "requisiteNote": "To enrol in this course you must: be enrolled in the Master of Computing AND have successfully completed: ( COMP6442 or COMP2100 ) AND ( COMP8260 or COMP8280 ) AND be concurrently enrolled in or have successfully completed: COMP6120 or COMP2120 OR be enrolled in the Master of Machine Learning and Computer Vision AND have successfully completed: ( COMP6442 or COMP2100 ) AND ( COMP6250 or COMP8260 or COMP8280 ) Incompatible with COMP8755 and COMP8830 and COMP8800 and COMP8715",
+      "needsPermissionCode": false,
+      "sessions": [],
+      "prereqs": [],
+      "requisitesModelled": false
+    },
+    {
+      "code": "COMP8536",
+      "title": "Advanced Topics in Deep Learning for Computer Vision",
+      "units": 6,
+      "subject": "COMP",
+      "requisiteNote": "To enrol in this course you must be studying Master of Engineering or Master of Machine Learning and Computer Vision or Master of Computing (Advanced). Students must have completed either COMP6710 or COMP6730 or equivalent.",
+      "needsPermissionCode": false,
+      "sessions": [],
+      "prereqs": [],
+      "requisitesModelled": false
+    },
+    {
+      "code": "COMP8610",
+      "title": "Computer Graphics",
+      "units": 6,
+      "subject": "COMP",
+      "requisiteNote": "To enrol in this course you must: be studying VCOMP OR be studying MMLCV and have completed COMP6710 or COMP1110 or COMP1140 OR have completed ( COMP6710 or COMP1110 or COMP1140 ) and have completed ( COMP6390 or COMP6442 or COMP6540 or COMP6780 or COMP6720 ). You are not able to enrol in this course if you have successfully completed COMP4610 or COMP6461 .",
+      "needsPermissionCode": false,
+      "sessions": [
+        "S1"
+      ],
+      "prereqs": [],
+      "requisitesModelled": false
+    },
+    {
+      "code": "COMP8620",
+      "title": "Advanced Topics in Artificial intelligence",
+      "units": 6,
+      "subject": "COMP",
+      "requisiteNote": "To enrol in this course you must have completed COMP6320 or COMP3620 . Additional Prerequisite courses for the Advanced Topic will be listed on the SoCo website (Special Topics in Computing page ) when the course topic is announced. Students who meet the pre-requisites can request a permission code following the instructions for Enrolling in CSS courses . Incompatible with COMP4620 . You will need to contact the School of Computing to request a permission code to enrol in this course.",
+      "needsPermissionCode": true,
+      "sessions": [
+        "S2"
+      ],
+      "prereqs": [],
+      "requisitesModelled": false
+    },
+    {
+      "code": "COMP8650",
+      "title": "Advanced Topics in Machine Learning",
+      "units": 6,
+      "subject": "COMP",
+      "requisiteNote": "To enrol in this course you must have completed COMP6670 Introduction to Machine Learning or COMP8600 Statistical Machine Learning. Additional Prerequisite courses for the Advanced Topic will be listed on the SoCo website (Special Topics in Computing page ) when the course topic is announced. Students who meet the pre-requisites can request a permission code following the instructions for Enrolling in CECC courses.",
+      "needsPermissionCode": true,
+      "sessions": [
+        "S1"
+      ],
+      "prereqs": [],
+      "requisitesModelled": false
+    },
+    {
+      "code": "COMP8691",
+      "title": "Optimisation",
+      "units": 6,
+      "subject": "COMP",
+      "requisiteNote": "To enrol in this course you must have completed COMP6320 or COMP3620 . Incompatible with COMP4690 .",
+      "needsPermissionCode": false,
+      "sessions": [
+        "S2"
+      ],
+      "prereqs": [],
+      "requisitesModelled": false
+    },
+    {
+      "code": "COMP8712",
+      "title": "Compiler Construction",
+      "units": 6,
+      "subject": "COMP",
+      "requisiteNote": "To enrol in this course you must have completed COMP6442 AND COMP6310 . Students who have previously completed COMP3710 or COMP6470 - please contact CSS Student Services for a Permission Code.",
+      "needsPermissionCode": true,
+      "sessions": [
+        "S1"
+      ],
+      "prereqs": [],
+      "requisitesModelled": false
     },
     {
       "code": "COMP8715",
@@ -148,11 +677,26 @@
       "subject": "COMP",
       "requisiteNote": "To enrol in this course you must meet the eligibility criteria, which includes membership of a student project group before the end of week 1, where the project has been approved by the convener. To enrol in this course you must: be enrolled in the Master of Computing AND have successfully completed: COMP6442 or COMP2100 AND (COMP8260 or COMP8280) OR be enrolled in the Master of Machine Learning and Computer Vision.",
       "needsPermissionCode": false,
-      "sessions": ["S1", "S2"],
+      "sessions": [
+        "S1",
+        "S2"
+      ],
       "prereqs": [
-        { "options": ["COMP6442"], "concurrent": false },
-        { "options": ["COMP8260", "COMP8280"], "concurrent": false }
-      ]
+        {
+          "options": [
+            "COMP6442"
+          ],
+          "concurrent": false
+        },
+        {
+          "options": [
+            "COMP8260",
+            "COMP8280"
+          ],
+          "concurrent": false
+        }
+      ],
+      "requisitesModelled": true
     },
     {
       "code": "COMP8830",
@@ -161,11 +705,271 @@
       "subject": "COMP",
       "requisiteNote": "To enrol in this course you must: Be enrolled in the Master of Computing (MCOMP) and have successfully completed: COMP8260 and COMP6442 OR Be enrolled in the Master of Machine Learning and Computer Vision (MMLCV) and have successfully completed: COMP6710 and (COMP6250 OR COMP8260). Incompatible with COMP8715 and COMP8755 and COMP8800. You will need to undergo competitive entry to enrol in this course. You will need to contact the School of Computing to request a permission code.",
       "needsPermissionCode": true,
-      "sessions": ["S1", "S2"],
+      "sessions": [
+        "S1",
+        "S2"
+      ],
       "prereqs": [
-        { "options": ["COMP6442"], "concurrent": false },
-        { "options": ["COMP8260"], "concurrent": false }
-      ]
+        {
+          "options": [
+            "COMP6442"
+          ],
+          "concurrent": false
+        },
+        {
+          "options": [
+            "COMP8260"
+          ],
+          "concurrent": false
+        }
+      ],
+      "requisitesModelled": true
+    },
+    {
+      "code": "COMP8880",
+      "title": "Computational Methods for Network Science",
+      "units": 6,
+      "subject": "COMP",
+      "requisiteNote": "To enrol in this course you must have completed COMP6670 ; OR (6 units of either COMP6710 or COMP6730 or COMP7230 ) and (either COMP8410 or COMP8910 ) and STAT6039 . Incompatible with COMP4880 and COMP8980 .",
+      "needsPermissionCode": false,
+      "sessions": [],
+      "prereqs": [],
+      "requisitesModelled": false
+    },
+    {
+      "code": "COMP8980",
+      "title": "Computational Methods for Network Science",
+      "units": 6,
+      "subject": "COMP",
+      "requisiteNote": "To enrol in this course you must have completed COMP6670 OR ( COMP6710 or COMP6730 or COMP7230 ) AND COMP8410 AND STAT6039 AND be enrolled in MADAN. Incompatible with COMP4880 and COMP8880 .",
+      "needsPermissionCode": false,
+      "sessions": [],
+      "prereqs": [],
+      "requisitesModelled": false
+    },
+    {
+      "code": "ENGN6213",
+      "title": "Digital Systems and Microprocessors",
+      "units": 6,
+      "subject": "ENGN",
+      "requisiteNote": "To enrol in this course you must be studying Master of Engineering or Master of Computing or Master of Computing (Advanced). Incompatible with ENGN4213 .",
+      "needsPermissionCode": false,
+      "sessions": [
+        "S1"
+      ],
+      "prereqs": [],
+      "requisitesModelled": false
+    },
+    {
+      "code": "ENGN6223",
+      "title": "Control Systems",
+      "units": 6,
+      "subject": "ENGN",
+      "requisiteNote": "To enrol in this course you must be studying Master of Engineering.",
+      "needsPermissionCode": false,
+      "sessions": [
+        "S2"
+      ],
+      "prereqs": [],
+      "requisitesModelled": false
+    },
+    {
+      "code": "ENGN6250",
+      "title": "Professional Practice: Holistic Thinking and Communication",
+      "units": 6,
+      "subject": "ENGN",
+      "requisiteNote": "To enrol in this course you must be enrolled in the Master of Engineering.",
+      "needsPermissionCode": false,
+      "sessions": [],
+      "prereqs": [],
+      "requisitesModelled": false
+    },
+    {
+      "code": "ENGN6331",
+      "title": "Systems Dynamics",
+      "units": 6,
+      "subject": "ENGN",
+      "requisiteNote": "To enrol in this course you must be studying Master of Engineering.",
+      "needsPermissionCode": false,
+      "sessions": [
+        "S1"
+      ],
+      "prereqs": [],
+      "requisitesModelled": false
+    },
+    {
+      "code": "ENGN6350",
+      "title": "Principles of Information Engineering",
+      "units": 6,
+      "subject": "ENGN",
+      "requisiteNote": "To enrol in this course you must be studying Master of Engineering in Electrical Engineering or Master of Computing or Master of Computing (Advanced) or Master of Machine Learning and Computer Vision. Incompatible with ENGN3350 , ENGN3226 , ENGN6626 , COMP2610 , COMP6261 .",
+      "needsPermissionCode": false,
+      "sessions": [],
+      "prereqs": [],
+      "requisitesModelled": false
+    },
+    {
+      "code": "ENGN6410",
+      "title": "Engineering Sustainable Systems",
+      "units": 6,
+      "subject": "ENGN",
+      "requisiteNote": "To enrol in this course you must be studying a Master of Engineering or Master of Energy Change or Master of Energy Change (Research). Incompatible with ENGN3410 .",
+      "needsPermissionCode": false,
+      "sessions": [
+        "S2"
+      ],
+      "prereqs": [],
+      "requisitesModelled": false
+    },
+    {
+      "code": "ENGN6516",
+      "title": "Energy Resources and Renewable Technologies",
+      "units": 6,
+      "subject": "ENGN",
+      "requisiteNote": "To enrol in this course you must be studying a Master of Engineering or Master of Energy Change or Master of Energy Change (Research). Incompatible with ENGN3516 .",
+      "needsPermissionCode": false,
+      "sessions": [
+        "S2"
+      ],
+      "prereqs": [],
+      "requisitesModelled": false
+    },
+    {
+      "code": "ENGN6548",
+      "title": "Wind Energy",
+      "units": 6,
+      "subject": "ENGN",
+      "requisiteNote": "Incompatible with ENGN4548 .",
+      "needsPermissionCode": false,
+      "sessions": [
+        "S2"
+      ],
+      "prereqs": [],
+      "requisitesModelled": false
+    },
+    {
+      "code": "ENGN6613",
+      "title": "Applied Optics",
+      "units": 6,
+      "subject": "ENGN",
+      "requisiteNote": "Incompatible: PHYS3051 , ENGN4613 , PHYS6502",
+      "needsPermissionCode": false,
+      "sessions": [
+        "S2"
+      ],
+      "prereqs": [],
+      "requisitesModelled": false
+    },
+    {
+      "code": "ENGN6625",
+      "title": "Power Systems and Power Electronics",
+      "units": 6,
+      "subject": "ENGN",
+      "requisiteNote": "To enrol in this course you must be studying Master of Engineering. Incompatible with ENGN4625 .",
+      "needsPermissionCode": false,
+      "sessions": [
+        "S2"
+      ],
+      "prereqs": [],
+      "requisitesModelled": false
+    },
+    {
+      "code": "ENGN6628",
+      "title": "Network Optimisation and Control",
+      "units": 6,
+      "subject": "ENGN",
+      "requisiteNote": "",
+      "needsPermissionCode": false,
+      "sessions": [
+        "S2"
+      ],
+      "prereqs": [],
+      "requisitesModelled": false
+    },
+    {
+      "code": "ENGN8100",
+      "title": "Introduction to Systems Engineering",
+      "units": 6,
+      "subject": "ENGN",
+      "requisiteNote": "To enrol in this course you must be studying Master of Engineering, Master of Computing, Master of Computing (Advanced), Master of Project Management, Master of Business Information Systems or Graduate Certificate in Nuclear Technology and Regulation.",
+      "needsPermissionCode": false,
+      "sessions": [
+        "S1"
+      ],
+      "prereqs": [],
+      "requisitesModelled": false
+    },
+    {
+      "code": "ENGN8122",
+      "title": "Intelligent Autonomous Systems",
+      "units": 6,
+      "subject": "ENGN",
+      "requisiteNote": "To enrol in this course, you must be studying Master of Engineering in Electrical Engineering or Master of Computing or Master of Computing (Advanced) or Master of Machine Learning and Computer Vision. Incompatible with ENGN4122 and ENGN8536 .",
+      "needsPermissionCode": false,
+      "sessions": [
+        "S2"
+      ],
+      "prereqs": [],
+      "requisitesModelled": false
+    },
+    {
+      "code": "ENGN8224",
+      "title": "Advanced Control Systems",
+      "units": 6,
+      "subject": "ENGN",
+      "requisiteNote": "To enrol in this course you must be studying a Master of Engineering, and have completed ENGN3223 or ENGN6223 or an equivalent course in control systems.",
+      "needsPermissionCode": false,
+      "sessions": [],
+      "prereqs": [],
+      "requisitesModelled": false
+    },
+    {
+      "code": "ENGN8501",
+      "title": "Advanced Topics in Computer Vision",
+      "units": 6,
+      "subject": "ENGN",
+      "requisiteNote": "To enrol in this course you must have completed ENGN6528 or COMP6528 .",
+      "needsPermissionCode": false,
+      "sessions": [],
+      "prereqs": [],
+      "requisitesModelled": false
+    },
+    {
+      "code": "ENGN8538",
+      "title": "Probability and Stochastic Processes in Engineering",
+      "units": 6,
+      "subject": "ENGN",
+      "requisiteNote": "To enrol in this course you must be studying Master of Engineering.",
+      "needsPermissionCode": false,
+      "sessions": [
+        "S1"
+      ],
+      "prereqs": [],
+      "requisitesModelled": false
+    },
+    {
+      "code": "ENGN8823",
+      "title": "Virtual Exchange",
+      "units": 6,
+      "subject": "ENGN",
+      "requisiteNote": "",
+      "needsPermissionCode": false,
+      "sessions": [],
+      "prereqs": [],
+      "requisitesModelled": false
+    },
+    {
+      "code": "ENGN8830",
+      "title": "Photovoltaic Power Plants",
+      "units": 6,
+      "subject": "ENGN",
+      "requisiteNote": "",
+      "needsPermissionCode": false,
+      "sessions": [
+        "S2"
+      ],
+      "prereqs": [],
+      "requisitesModelled": false
     },
     {
       "code": "MATH6005",
@@ -174,8 +978,11 @@
       "subject": "MATH",
       "requisiteNote": "CECS students must be enrolled in a Graduate Diploma of Computing or a Master of Computing to enrol in this course. Incompatible: MATH1005",
       "needsPermissionCode": false,
-      "sessions": ["S1"],
-      "prereqs": []
+      "sessions": [
+        "S1"
+      ],
+      "prereqs": [],
+      "requisitesModelled": true
     }
   ],
   "buckets": [
@@ -188,7 +995,12 @@
       "kind": "list",
       "mode": "consuming",
       "exclusive": true,
-      "members": ["COMP6250", "COMP6442", "COMP6710", "COMP8260"],
+      "members": [
+        "COMP6250",
+        "COMP6442",
+        "COMP6710",
+        "COMP8260"
+      ],
       "subjects": [],
       "minLevel": null,
       "maxLevel": null,
@@ -204,7 +1016,10 @@
       "kind": "list",
       "mode": "consuming",
       "exclusive": false,
-      "members": ["MATH6005", "COMP6260"],
+      "members": [
+        "MATH6005",
+        "COMP6260"
+      ],
       "subjects": [],
       "minLevel": null,
       "maxLevel": null,
@@ -220,7 +1035,10 @@
       "kind": "list",
       "mode": "consuming",
       "exclusive": true,
-      "members": ["COMP8715", "COMP8830"],
+      "members": [
+        "COMP8715",
+        "COMP8830"
+      ],
       "subjects": [],
       "minLevel": null,
       "maxLevel": null,
@@ -253,7 +1071,10 @@
       "mode": "consuming",
       "exclusive": false,
       "members": [],
-      "subjects": ["COMP", "ENGN"],
+      "subjects": [
+        "COMP",
+        "ENGN"
+      ],
       "minLevel": 6000,
       "maxLevel": 8000,
       "includeSpecialisationMembers": false,
@@ -285,7 +1106,9 @@
       "mode": "overlay",
       "exclusive": false,
       "members": [],
-      "subjects": ["COMP"],
+      "subjects": [
+        "COMP"
+      ],
       "minLevel": 8000,
       "maxLevel": 8000,
       "includeSpecialisationMembers": true,
@@ -300,7 +1123,12 @@
       "kind": "list",
       "mode": "consuming",
       "exclusive": true,
-      "members": ["COMP6250", "COMP6442", "COMP6710", "COMP8260"],
+      "members": [
+        "COMP6250",
+        "COMP6442",
+        "COMP6710",
+        "COMP8260"
+      ],
       "subjects": [],
       "minLevel": null,
       "maxLevel": null,
@@ -316,7 +1144,10 @@
       "kind": "list",
       "mode": "consuming",
       "exclusive": false,
-      "members": ["MATH6005", "COMP6260"],
+      "members": [
+        "MATH6005",
+        "COMP6260"
+      ],
       "subjects": [],
       "minLevel": null,
       "maxLevel": null,
@@ -332,7 +1163,10 @@
       "kind": "list",
       "mode": "consuming",
       "exclusive": true,
-      "members": ["COMP8715", "COMP8830"],
+      "members": [
+        "COMP8715",
+        "COMP8830"
+      ],
       "subjects": [],
       "minLevel": null,
       "maxLevel": null,
@@ -365,7 +1199,10 @@
       "mode": "consuming",
       "exclusive": false,
       "members": [],
-      "subjects": ["COMP", "ENGN"],
+      "subjects": [
+        "COMP",
+        "ENGN"
+      ],
       "minLevel": 6000,
       "maxLevel": 8000,
       "includeSpecialisationMembers": false,
@@ -397,7 +1234,9 @@
       "mode": "overlay",
       "exclusive": false,
       "members": [],
-      "subjects": ["COMP"],
+      "subjects": [
+        "COMP"
+      ],
       "minLevel": 8000,
       "maxLevel": 8000,
       "includeSpecialisationMembers": false,
@@ -412,7 +1251,12 @@
       "kind": "list",
       "mode": "consuming",
       "exclusive": true,
-      "members": ["COMP6120", "COMP6442", "COMP7710", "COMP8280"],
+      "members": [
+        "COMP6120",
+        "COMP6442",
+        "COMP7710",
+        "COMP8280"
+      ],
       "subjects": [],
       "minLevel": null,
       "maxLevel": null,
@@ -428,7 +1272,10 @@
       "kind": "list",
       "mode": "consuming",
       "exclusive": false,
-      "members": ["MATH6005", "COMP6260"],
+      "members": [
+        "MATH6005",
+        "COMP6260"
+      ],
       "subjects": [],
       "minLevel": null,
       "maxLevel": null,
@@ -444,7 +1291,10 @@
       "kind": "list",
       "mode": "consuming",
       "exclusive": true,
-      "members": ["COMP8715", "COMP8830"],
+      "members": [
+        "COMP8715",
+        "COMP8830"
+      ],
       "subjects": [],
       "minLevel": null,
       "maxLevel": null,
@@ -477,7 +1327,10 @@
       "mode": "consuming",
       "exclusive": false,
       "members": [],
-      "subjects": ["COMP", "ENGN"],
+      "subjects": [
+        "COMP",
+        "ENGN"
+      ],
       "minLevel": 6000,
       "maxLevel": 8000,
       "includeSpecialisationMembers": false,
@@ -509,7 +1362,9 @@
       "mode": "overlay",
       "exclusive": false,
       "members": [],
-      "subjects": ["COMP"],
+      "subjects": [
+        "COMP"
+      ],
       "minLevel": 8000,
       "maxLevel": 8000,
       "includeSpecialisationMembers": false,
@@ -520,7 +1375,10 @@
     {
       "key": "human-centred-and-creative-computing",
       "label": "Human Centred and Creative Computing",
-      "members": ["COMP6390", "COMP8020"]
+      "members": [
+        "COMP6390",
+        "COMP8020"
+      ]
     }
   ]
 }

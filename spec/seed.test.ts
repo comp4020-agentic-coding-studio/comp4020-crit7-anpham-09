@@ -31,11 +31,23 @@ describe("the committed seed", () => {
     // No duplicate course codes.
     expect(codes.size).toBe(seed.courses.length);
 
-    // Every course has a real unit value, a subject, and at least one session.
+    // Every course has a real unit value and a subject. Every hand-verified
+    // course (requisitesModelled: true) also has at least one session on
+    // record. A machine-extracted course may not: its own /2026/ page didn't
+    // always yield a recognisable "Offered in ..." pattern, and fabricating
+    // a session for it would be worse than the honest "no semester on
+    // record" eligibility.ts already renders for an empty sessions list —
+    // see its not-offered message. Whatever sessions a course DOES list,
+    // hand-verified or not, still has to be a real one.
     for (const course of seed.courses) {
       expect(course.units, course.code).toBeGreaterThan(0);
       expect(course.subject, course.code).toMatch(/^[A-Z]{4}$/);
-      expect(course.sessions.length, course.code).toBeGreaterThan(0);
+      if (course.requisitesModelled) {
+        expect(course.sessions.length, course.code).toBeGreaterThan(0);
+      }
+      for (const session of course.sessions) {
+        expect(["S1", "S2"], course.code).toContain(session);
+      }
       expect(levelOf(course.code), course.code).toBeGreaterThanOrEqual(1000);
     }
 
@@ -84,6 +96,38 @@ describe("the committed seed", () => {
     for (const year of restYears) {
       const keys = [...(keysByYear.get(year) ?? [])].sort();
       expect(keys, `academicYear ${year}`).toEqual(firstKeys);
+    }
+  });
+
+  it("carries the widened catalogue: 72 courses, 16 hand-verified plus 56 with unmodelled prerequisites", async () => {
+    const seedUrl = new URL(SEED, import.meta.url);
+    const seed = JSON.parse(readFileSync(seedUrl, "utf8"));
+
+    expect(seed.courses.length).toBe(72);
+
+    const modelled = seed.courses.filter(
+      (c: { requisitesModelled: boolean }) => c.requisitesModelled,
+    );
+    const unmodelled = seed.courses.filter(
+      (c: { requisitesModelled: boolean }) => !c.requisitesModelled,
+    );
+    expect(modelled.length).toBe(16);
+    expect(unmodelled.length).toBe(56);
+
+    // The three hand-verified courses the additions enumeration missed —
+    // dropping any of these silently loses real, structured prerequisite
+    // data.
+    for (const code of ["COMP8410", "COMP8715", "MATH6005"]) {
+      const course = seed.courses.find((c: { code: string }) => c.code === code);
+      expect(course, `${code} missing from the merged catalogue`).toBeDefined();
+      expect(course.requisitesModelled, code).toBe(true);
+    }
+
+    // A course whose prerequisites aren't modelled must never also claim a
+    // structured rule — that would be worse than showing none, since it
+    // would be actively wrong instead of merely silent.
+    for (const course of unmodelled) {
+      expect(course.prereqs, course.code).toEqual([]);
     }
   });
 });

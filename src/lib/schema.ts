@@ -18,6 +18,13 @@ export const courses = sqliteTable("courses", {
   needsPermissionCode: int("needs_permission_code", { mode: "boolean" })
     .notNull()
     .default(false),
+  /** False for a machine-extracted course whose `requisiteNote` prose has
+   *  not been converted into a structured `prereqs` rule — see
+   *  `SeedCourse.requisitesModelled`. Defaults true: existing rows predate
+   *  this column and were all hand-verified. */
+  requisitesModelled: int("requisites_modelled", { mode: "boolean" })
+    .notNull()
+    .default(true),
 });
 
 export const offerings = sqliteTable(

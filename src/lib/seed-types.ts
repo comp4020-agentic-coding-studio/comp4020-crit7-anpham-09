@@ -24,6 +24,13 @@ export interface SeedCourse {
   sessions: Session[];
   /** An AND of ORs: every group must be satisfied. */
   prereqs: PrereqGroup[];
+  /** False for a course whose `prereqs` is a machine-extracted placeholder
+   *  (always `[]`) rather than a hand-verified structured rule. This is the
+   *  difference between "no prerequisite" and "prerequisite not modelled" —
+   *  the two must never look the same, in the eligibility warning or the
+   *  catalogue table, or the app is silently claiming to know something it
+   *  doesn't. See `requisites-not-modelled` in `rules/eligibility.ts`. */
+  requisitesModelled: boolean;
 }
 
 export type BucketKind = "list" | "predicate";

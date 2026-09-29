@@ -22,6 +22,15 @@ describe("formatPrereqs", () => {
     );
   });
 
+  it("says a course's prerequisites aren't modelled rather than rendering None", () => {
+    // Empty groups plus modelled: false is exactly the machine-extracted
+    // additions' shape (prereqs: [], requisitesModelled: false) — the
+    // structured rule is empty for a different reason than "no
+    // prerequisite exists", so it must never read the same as `[]` alone.
+    expect(formatPrereqs([], false)).not.toBe(formatPrereqs([]));
+    expect(formatPrereqs([], false)).toBe("Not modelled — see ANU's wording below");
+  });
+
   it("ANDs multiple groups together", () => {
     // COMP6442's real requisite: strictly-earlier COMP7710, AND
     // (MATH6005 or COMP6260) which may be concurrent.

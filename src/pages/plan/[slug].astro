@@ -134,7 +134,7 @@ const catalogueRows = [...catalogue.values()].sort((a, b) => a.code.localeCompar
                     <td>{course.units}</td>
                     <td>{[...course.sessions].sort().join(", ") || "—"}</td>
                     <td>{course.needsPermissionCode ? "Yes" : "No"}</td>
-                    <td>{formatPrereqs(course.prereqs)}</td>
+                    <td>{formatPrereqs(course.prereqs, course.requisitesModelled)}</td>
                   </tr>
                   <tr class="requisite-row">
                     <td colspan="6">

@@ -16,6 +16,7 @@ function course(code: string, over: Partial<SeedCourse> = {}): SeedCourse {
     needsPermissionCode: false,
     sessions: ["S1", "S2"],
     prereqs: [],
+    requisitesModelled: true,
     ...over,
   };
 }
@@ -33,6 +34,7 @@ const CATALOGUE = new Map<string, SeedCourse>(
     course("COMP6442"),
     course("COMP8410", { sessions: ["S2"] }),
     course("COMP8600", { needsPermissionCode: true }),
+    course("COMP9001", { requisitesModelled: false }),
   ].map((c) => [c.code, c]),
 );
 
@@ -125,6 +127,33 @@ describe("eligibility", () => {
     const items = [planned("COMP8410", "2026-S2"), planned("COMP8410", "2027-S2")];
     const verdict = evaluateItem(items[0], CATALOGUE, items);
     expect(verdict.reasons.map((r: { kind: string }) => r.kind)).toContain("duplicate");
+  });
+
+  it("warns, but does not block, a course whose prerequisites aren't modelled", () => {
+    // COMP9001 has requisitesModelled: false and no structured prereqs to
+    // fail against — a build that ignores the flag reports this course as
+    // cleanly `ok` with zero reasons, which is exactly the confidently
+    // wrong answer this warning exists to prevent.
+    const items = [planned("COMP9001", "2026-S2")];
+    const verdict = evaluateItem(items[0], CATALOGUE, items);
+    const reason = verdict.reasons.find(
+      (r: { kind: string }) => r.kind === "requisites-not-modelled",
+    );
+    expect(reason).toBeDefined();
+    expect(reason.severity).toBe("warning");
+    expect(reason.text).toContain("COMP9001");
+    expect(verdict.ok).toBe(true);
+  });
+
+  it("does not warn a hand-verified course whose prerequisites are modelled", () => {
+    // COMP8410 has requisitesModelled: true (the default from the `course()`
+    // helper) — a build that emits the warning unconditionally, ignoring the
+    // flag, would fail this.
+    const items = [planned("COMP8410", "2026-S2")];
+    const verdict = evaluateItem(items[0], CATALOGUE, items);
+    expect(
+      verdict.reasons.map((r: { kind: string }) => r.kind),
+    ).not.toContain("requisites-not-modelled");
   });
 });
 

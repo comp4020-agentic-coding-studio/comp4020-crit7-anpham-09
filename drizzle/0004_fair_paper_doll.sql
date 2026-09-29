@@ -1,0 +1,1 @@
+ALTER TABLE `courses` ADD `requisites_modelled` integer DEFAULT true NOT NULL;

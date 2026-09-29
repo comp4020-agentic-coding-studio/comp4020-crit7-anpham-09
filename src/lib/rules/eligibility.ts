@@ -16,6 +16,7 @@ export type ReasonKind =
   | "duplicate"
   | "overload"
   | "permission-code"
+  | "requisites-not-modelled"
   | "unknown";
 
 export type Severity = "blocking" | "warning";
@@ -100,6 +101,19 @@ export function evaluateItem(
         text: `${options} must be completed ${when}.`,
       });
     }
+  }
+
+  // Warning, not blocking: an unmodelled course may well be fine, but this
+  // app hasn't converted ANU's prose into a structured rule for it, so it
+  // must never look identical to a course whose prerequisites are known and
+  // clear. The verbatim note is shown alongside every course in the
+  // catalogue table — that prose, not this app, is the authority here.
+  if (!course.requisitesModelled) {
+    reasons.push({
+      kind: "requisites-not-modelled",
+      severity: "warning",
+      text: `${course.code}'s prerequisites aren't modelled by this app — read ANU's own wording for ${course.code} in the catalogue below before relying on this plan.`,
+    });
   }
 
   if (course.needsPermissionCode) {
