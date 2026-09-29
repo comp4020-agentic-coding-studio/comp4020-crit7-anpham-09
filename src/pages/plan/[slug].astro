@@ -101,34 +101,49 @@ const catalogueRows = [...catalogue.values()].sort((a, b) => a.code.localeCompar
         <h2 id="catalogue">Catalogue</h2>
         <p>
           Every course this app knows about, so you never have to type a code
-          blind. Prerequisites are the structured rule this app checks; the
-          requisite note alongside is ANU's own prose in full.
+          blind. Prerequisites are the structured rule this app checks; open
+          "ANU's wording" under a course for its requisite note, ANU's own
+          prose in full.
         </p>
-        <table>
+        <table class="catalogue-table">
           <caption>The seeded catalogue, {catalogueRows.length} courses, by code</caption>
           <thead>
             <tr>
               <th scope="col">Code</th>
               <th scope="col">Title</th>
               <th scope="col">Units</th>
-              <th scope="col">Sessions</th>
-              <th scope="col">Permission code</th>
-              <th scope="col">Prerequisites</th>
-              <th scope="col">Requisite note</th>
+              <th scope="col">
+                <abbr title="Sessions">Sess.</abbr>
+              </th>
+              <th scope="col">
+                <abbr title="Permission code">Perm.</abbr>
+              </th>
+              <th scope="col">
+                <abbr title="Prerequisites">Prereqs</abbr>
+              </th>
             </tr>
           </thead>
           <tbody>
             {
               catalogueRows.map((course) => (
-                <tr>
-                  <th scope="row">{course.code}</th>
-                  <td>{course.title}</td>
-                  <td>{course.units}</td>
-                  <td>{[...course.sessions].sort().join(", ") || "—"}</td>
-                  <td>{course.needsPermissionCode ? "Yes" : "No"}</td>
-                  <td>{formatPrereqs(course.prereqs)}</td>
-                  <td>{course.requisiteNote}</td>
-                </tr>
+                <>
+                  <tr class="course-row">
+                    <th scope="row">{course.code}</th>
+                    <td>{course.title}</td>
+                    <td>{course.units}</td>
+                    <td>{[...course.sessions].sort().join(", ") || "—"}</td>
+                    <td>{course.needsPermissionCode ? "Yes" : "No"}</td>
+                    <td>{formatPrereqs(course.prereqs)}</td>
+                  </tr>
+                  <tr class="requisite-row">
+                    <td colspan="6">
+                      <details>
+                        <summary>{`${course.code}: ANU's wording`}</summary>
+                        <p>{course.requisiteNote}</p>
+                      </details>
+                    </td>
+                  </tr>
+                </>
               ))
             }
           </tbody>
@@ -154,6 +169,11 @@ const catalogueRows = [...catalogue.values()].sort((a, b) => a.code.localeCompar
 
       <section aria-labelledby="progress">
         <h2 id="progress">Degree progress</h2>
+        <p>
+          These are the 2026 Academic Year's requirements; ANU holds you to
+          the rules of the year you commenced, so if that isn't 2026, treat
+          this progress as indicative only.
+        </p>
         <p>
           {progress.totalUnits} of {progress.requiredTotal} units.
           {progress.complete ? " This plan completes the degree." : " Not yet complete."}

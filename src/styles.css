@@ -78,6 +78,45 @@ td {
   padding: 0.4rem 0.5rem;
   text-align: left;
   vertical-align: top;
+  /* A course code or a run of requisite prose is a single long unbreakable
+     token at a 390px viewport; without this, auto table layout demands at
+     least each column's min-content width and the table (and the page)
+     overflows horizontally rather than wrapping. */
+  overflow-wrap: anywhere;
+}
+
+/* Six columns of catalogue data (down from seven — the verbatim requisite
+   prose moved into the <details> row below) still don't fit a 390px
+   viewport at their natural content widths. A smaller type size, tighter
+   padding, and the nowrap/min-width rules below (table-layout stays the
+   default `auto`) keep every column readable instead of overflowing. */
+.catalogue-table {
+  font-size: 0.8125rem;
+}
+.catalogue-table th,
+.catalogue-table td {
+  padding: 0.3rem 0.25rem;
+}
+/* Column headers are short by design (abbreviated where needed, with the
+   full word on the `abbr` title) and a course code is a single short
+   identifier: neither should ever wrap, so auto layout can give the
+   remaining width to the columns that actually hold prose. */
+.catalogue-table thead th,
+.catalogue-table tbody th {
+  white-space: nowrap;
+}
+/* Without a floor, auto layout starves the title column down to a couple
+   of characters once the code and header columns claim their nowrap
+   widths. A modest minimum keeps most course titles wrapping whole words
+   instead of mid-word. */
+.catalogue-table td:nth-child(2) {
+  min-width: 3.5rem;
+}
+/* The abbreviated headers (Sess., Perm., Prereqs) keep their full word
+   reachable via the title attribute; visually they're the same weight as
+   the rest of the header row rather than looking like a shortened aside. */
+.catalogue-table abbr {
+  text-decoration-style: dotted;
 }
 
 /* WCAG 2.5.5: every interactive target clears a 44x44px hit area, whole box
@@ -90,4 +129,39 @@ button {
 .remove-button {
   min-height: 44px;
   padding-inline: 0.8rem;
+}
+
+/* The catalogue table's verbatim requisite prose (some cells exceed 300
+   characters) used to sit in its own column and forced the whole table
+   wider than a 390px viewport. It now lives in a <details> disclosure in a
+   full-width row under each course instead, so the six short columns set
+   the table's width and the prose is reachable without JavaScript. */
+.course-row th,
+.course-row td {
+  border-bottom: none;
+}
+.requisite-row td {
+  padding-block: 0 0.6rem;
+  border-bottom: 1px solid var(--colour-rule);
+}
+.requisite-row summary {
+  min-height: 44px;
+  padding-inline: 0.5rem;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: var(--colour-link);
+}
+/* display: flex drops the browser's default disclosure marker, so the
+   open/closed state gets its own visible indicator instead of relying on
+   colour alone. */
+.requisite-row summary::before {
+  content: "▸ ";
+}
+.requisite-row details[open] summary::before {
+  content: "▾ ";
+}
+.requisite-row p {
+  margin: 0.5rem 0 0;
+  color: var(--colour-text);
 }
