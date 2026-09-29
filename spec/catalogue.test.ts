@@ -146,4 +146,41 @@ describe("catalogue: db-layer round trip", () => {
     expect(itemsAfter.length).toBe(1);
     expect(itemsAfter[0].courseCode).toBe("COMP6120");
   });
+
+  it("loadBuckets() sorts even when the physical row order is reversed", async () => {
+    // Regression test for a vacuous-assertion bug: seed.json already lists
+    // buckets in ascending sortOrder, seeding inserts them in file order, and
+    // a plain SELECT returns SQLite rows in rowid (insertion) order — so
+    // "assert the output equals its own sorted copy" passes whether or not
+    // loadBuckets() actually sorts. This test breaks that by physically
+    // reversing the stored row order first, so a missing `.sort()` in
+    // loadBuckets() would come back descending and fail here.
+    const { db, buckets, loadBuckets } = await bootAgainst(freshDbPath());
+
+    const rows = db.select().from(buckets).all();
+    expect(rows.length).toBe(7);
+    const reversed = [...rows].sort((a, b) => b.sortOrder - a.sortOrder);
+
+    db.delete(buckets).run();
+    for (const row of reversed) {
+      db.insert(buckets).values(row).run();
+    }
+
+    // Confirm the sabotage worked: a plain SELECT now yields descending.
+    const rawAfter = db.select().from(buckets).all().map((b) => b.sortOrder);
+    expect(rawAfter).toEqual([7, 6, 5, 4, 3, 2, 1]);
+
+    const result = loadBuckets();
+    expect(result.map((b) => b.sortOrder)).toEqual([1, 2, 3, 4, 5, 6, 7]);
+    expect(result.map((b) => b.key)).toEqual([
+      "compulsory",
+      "foundational",
+      "project",
+      "specialisation",
+      "further",
+      "elective",
+      "comp8000",
+    ]);
+  });
+
 });
