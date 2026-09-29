@@ -1,0 +1,255 @@
+{
+  "program": {
+    "code": "7706",
+    "label": "Master of Computing",
+    "totalUnits": 96
+  },
+  "courses": [
+    {
+      "code": "COMP6120",
+      "title": "Software Engineering",
+      "units": 6,
+      "subject": "COMP",
+      "requisiteNote": "To enrol in this course you must have successfully completed or be currently studying COMP6442 or COMP2100. Incompatible with COMP2120.",
+      "needsPermissionCode": false,
+      "sessions": ["S2"],
+      "prereqs": [{ "options": ["COMP6442"], "concurrent": true }]
+    },
+    {
+      "code": "COMP6240",
+      "title": "Relational Databases",
+      "units": 6,
+      "subject": "COMP",
+      "requisiteNote": "You are not able to enrol in this course if you have successfully completed COMP2400. Incompatible with COMP7240.",
+      "needsPermissionCode": false,
+      "sessions": ["S1", "S2"],
+      "prereqs": []
+    },
+    {
+      "code": "COMP6260",
+      "title": "Foundations of Computing",
+      "units": 6,
+      "subject": "COMP",
+      "requisiteNote": "Incompatible with COMP1600",
+      "needsPermissionCode": false,
+      "sessions": ["S2"],
+      "prereqs": []
+    },
+    {
+      "code": "COMP6390",
+      "title": "Human-Computer Interaction",
+      "units": 6,
+      "subject": "COMP",
+      "requisiteNote": "To enrol in this course you must: be studying Master of Computing OR Master of Computing Advanced OR have completed 6 units of (COMP6442 OR COMP6710 OR COMP6720). Incompatible with COMP3900.",
+      "needsPermissionCode": false,
+      "sessions": ["S2"],
+      "prereqs": []
+    },
+    {
+      "code": "COMP6442",
+      "title": "Software Construction",
+      "units": 6,
+      "subject": "COMP",
+      "requisiteNote": "To enrol in this course you must have either: completed (COMP6710 OR COMP7710 OR COMP1110 OR COMP1140); AND have completed or be currently enrolled in (MATH6005 OR COMP6260 OR MATH1005 OR COMP1600); OR be enrolled in the Master of Machine Learning and Computer Vision AND have completed (COMP6710 or COMP7710 or COMP1110 or COMP1140) OR be enrolled in the Master of Computing (Advanced). Incompatible with COMP2100.",
+      "needsPermissionCode": false,
+      "sessions": ["S1", "S2"],
+      "prereqs": [
+        { "options": ["COMP7710"], "concurrent": false },
+        { "options": ["MATH6005", "COMP6260"], "concurrent": true }
+      ]
+    },
+    {
+      "code": "COMP6730",
+      "title": "Programming for Scientists",
+      "units": 6,
+      "subject": "COMP",
+      "requisiteNote": "You are not able to enrol in this course if you have successfully completed COMP1100, COMP1130, COMP1730, COMP6710 or COMP7710.",
+      "needsPermissionCode": false,
+      "sessions": ["S2"],
+      "prereqs": []
+    },
+    {
+      "code": "COMP7710",
+      "title": "Programming Fundamentals",
+      "units": 12,
+      "subject": "COMP",
+      "requisiteNote": "You are not able to enrol in this course if you have previously completed or are currently enrolled in COMP1110 OR COMP1140 OR COMP6710. You will need to contact the School of Computing to request a permission code to enrol in this course.",
+      "needsPermissionCode": true,
+      "sessions": ["S1", "S2"],
+      "prereqs": []
+    },
+    {
+      "code": "COMP8020",
+      "title": "Advanced Topics in Human-Centred and Creative Computing",
+      "units": 6,
+      "subject": "COMP",
+      "requisiteNote": "To enrol in this course, you must have completed COMP6390. Additional Prerequisite courses for the Advanced Topic will be listed on the SoCo website when the course topic is announced. Students who meet the prerequisites can request a permission code from the College. You will need to contact the School of Computing to request a permission code to enrol in this course.",
+      "needsPermissionCode": true,
+      "sessions": ["S2"],
+      "prereqs": [{ "options": ["COMP6390"], "concurrent": false }]
+    },
+    {
+      "code": "COMP8280",
+      "title": "Responsible Practice, Innovation and Leadership",
+      "units": 6,
+      "subject": "COMP",
+      "requisiteNote": "To enrol in this course you must be enrolled in the Graduate Diploma of Computing or Master of Computing or Master of Computing (Advanced) or Master of Machine Learning and Computer Vision. Incompatible with COMP8260, ENGN8260 and ENGN8280.",
+      "needsPermissionCode": false,
+      "sessions": ["S1", "S2"],
+      "prereqs": []
+    },
+    {
+      "code": "COMP8410",
+      "title": "Data Mining",
+      "units": 6,
+      "subject": "COMP",
+      "requisiteNote": "To enrol in this course you must have completed COMP7240 or COMP6240 or COMP2400; and COMP6730 or COMP7230 or COMP6710. Incompatible with COMP3420 and COMP3425 and COMP8400 and COMP8910.",
+      "needsPermissionCode": false,
+      "sessions": ["S1"],
+      "prereqs": [
+        { "options": ["COMP6240"], "concurrent": false },
+        { "options": ["COMP6730"], "concurrent": false }
+      ]
+    },
+    {
+      "code": "COMP8715",
+      "title": "Advanced Computing Team Project",
+      "units": 6,
+      "subject": "COMP",
+      "requisiteNote": "To enrol in this course you must meet the eligibility criteria, which includes membership of a student project group before the end of week 1, where the project has been approved by the convener. To enrol in this course you must: be enrolled in the Master of Computing AND have successfully completed: COMP6442 or COMP2100 AND (COMP8260 or COMP8280) OR be enrolled in the Master of Machine Learning and Computer Vision.",
+      "needsPermissionCode": false,
+      "sessions": ["S1", "S2"],
+      "prereqs": [
+        { "options": ["COMP6442"], "concurrent": false },
+        { "options": ["COMP8280"], "concurrent": false }
+      ]
+    },
+    {
+      "code": "COMP8830",
+      "title": "Computing Internship",
+      "units": 12,
+      "subject": "COMP",
+      "requisiteNote": "To enrol in this course you must: Be enrolled in the Master of Computing (MCOMP) and have successfully completed: COMP8260 and COMP6442 OR Be enrolled in the Master of Machine Learning and Computer Vision (MMLCV) and have successfully completed: COMP6710 and (COMP6250 OR COMP8260). Incompatible with COMP8715 and COMP8755 and COMP8800. You will need to undergo competitive entry to enrol in this course. You will need to contact the School of Computing to request a permission code.",
+      "needsPermissionCode": true,
+      "sessions": ["S1", "S2"],
+      "prereqs": [{ "options": ["COMP6442"], "concurrent": false }]
+    },
+    {
+      "code": "MATH6005",
+      "title": "Discrete Mathematical Models",
+      "units": 6,
+      "subject": "MATH",
+      "requisiteNote": "CECS students must be enrolled in a Graduate Diploma of Computing or a Master of Computing to enrol in this course. Incompatible: MATH1005",
+      "needsPermissionCode": false,
+      "sessions": ["S1"],
+      "prereqs": []
+    }
+  ],
+  "buckets": [
+    {
+      "key": "compulsory",
+      "label": "Compulsory courses",
+      "minUnits": 30,
+      "capUnits": 30,
+      "kind": "list",
+      "mode": "consuming",
+      "exclusive": true,
+      "members": ["COMP6120", "COMP6442", "COMP7710", "COMP8280"],
+      "subjects": [],
+      "minLevel": null,
+      "maxLevel": null,
+      "sortOrder": 1
+    },
+    {
+      "key": "foundational",
+      "label": "Foundational courses",
+      "minUnits": 6,
+      "capUnits": 6,
+      "kind": "list",
+      "mode": "consuming",
+      "exclusive": false,
+      "members": ["MATH6005", "COMP6260"],
+      "subjects": [],
+      "minLevel": null,
+      "maxLevel": null,
+      "sortOrder": 2
+    },
+    {
+      "key": "project",
+      "label": "Project courses",
+      "minUnits": 0,
+      "capUnits": 12,
+      "kind": "list",
+      "mode": "consuming",
+      "exclusive": true,
+      "members": ["COMP8715", "COMP8830"],
+      "subjects": [],
+      "minLevel": null,
+      "maxLevel": null,
+      "sortOrder": 3
+    },
+    {
+      "key": "specialisation",
+      "label": "Specialisation",
+      "minUnits": 24,
+      "capUnits": 24,
+      "kind": "list",
+      "mode": "consuming",
+      "exclusive": false,
+      "members": [],
+      "subjects": [],
+      "minLevel": null,
+      "maxLevel": null,
+      "sortOrder": 4
+    },
+    {
+      "key": "further",
+      "label": "Further computing and engineering",
+      "minUnits": 18,
+      "capUnits": 18,
+      "kind": "predicate",
+      "mode": "consuming",
+      "exclusive": false,
+      "members": [],
+      "subjects": ["COMP", "ENGN"],
+      "minLevel": 6000,
+      "maxLevel": 8000,
+      "sortOrder": 5
+    },
+    {
+      "key": "elective",
+      "label": "Electives",
+      "minUnits": 6,
+      "capUnits": 18,
+      "kind": "predicate",
+      "mode": "consuming",
+      "exclusive": false,
+      "members": [],
+      "subjects": [],
+      "minLevel": null,
+      "maxLevel": null,
+      "sortOrder": 6
+    },
+    {
+      "key": "comp8000",
+      "label": "8000-level COMP",
+      "minUnits": 24,
+      "capUnits": 96,
+      "kind": "predicate",
+      "mode": "overlay",
+      "exclusive": false,
+      "members": [],
+      "subjects": ["COMP"],
+      "minLevel": 8000,
+      "maxLevel": 8000,
+      "sortOrder": 7
+    }
+  ],
+  "specialisations": [
+    {
+      "key": "human-centred-and-creative-computing",
+      "label": "Human Centred and Creative Computing",
+      "members": ["COMP6390", "COMP8020"]
+    }
+  ]
+}
