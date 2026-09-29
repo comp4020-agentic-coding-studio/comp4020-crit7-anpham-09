@@ -2294,6 +2294,12 @@ Replace the Task 1 draft. It must cover, because `/readme/` is what a marker rea
 
 - [ ] **Step 3: Write `PROCESS.md`**
 
+**150–300 words** — a crit week's `PROCESS.md` is short, in proportion to one
+week of work. Read
+`.superpowers/sdd/2026-09-29-fine-print/docs-requirements.md` first: it lists
+exactly what `pnpm check:evidence` enforces, including the commit-citation
+link format, which is mechanical and easy to get subtly wrong.
+
 An overview of how the work actually went: the brainstorm that chose this slice over room booking and Wattle, the stance decision and the three alternatives rejected, the inversion of the spec's scrape-first sequence into transcribe-first, and where the agent went wrong and how you corrected it. The spec line is "you can account for how you directed, grounded and corrected the work" — this is that account, and the honest failures are worth more in it than a clean narrative.
 
 - [ ] **Step 4: Write `reflections/crit-7.md`**
@@ -2350,13 +2356,35 @@ Expected: `200` three times.
 
 Use the `agent-browser` CLI — the rendered page is the truth, and your mental model of it is not. Create a plan, add a course, **reload**, confirm it is still there, and confirm a blocked course shows its reason.
 
-- [ ] **Step 5: Run the course's own preflight**
+- [ ] **Step 5: Flip the repo public**
+
+**The plan previously missed this, and it is a submission requirement.** The
+assessment page: "Before your cutoff, flip the repo public with the course
+`/ship` skill — the day before your crit is the norm." The whole repo goes
+public, commit history and CI logs included.
+
+```
+/comp4020:ship
+```
+
+- [ ] **Step 6: Confirm CI is green on the public repo**
+
+Flipping public turns CI on, and it deploys on every push to `main`. **Green
+checks at the cutoff sweep are worth half that week's shipped mark**, so a red
+CI run costs marks even with a working site.
+
+```bash
+gh run list --limit 3
+gh run watch
+```
+
+- [ ] **Step 7: Run the course's own preflight**
 
 ```
 /comp4020:preflight
 ```
 
-- [ ] **Step 6: Warm the machine before the session**
+- [ ] **Step 8: Warm the machine before the session**
 
 `auto_stop_machines = "stop"` means the first request after idle is a cold start. Load the URL a few minutes before 15:30 so the demo is warm.
 
