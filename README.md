@@ -3,12 +3,11 @@
 A Master of Computing (7706) study planner that validates while you plan,
 instead of after you commit.
 
-ANU's Programs and Courses holds every rule about what you may enrol in,
-and ISIS enforces them. Both know, when you pick a course, whether you're
-eligible and whether your plan will graduate you — neither tells you then.
-Fine Print is that same data, surfaced at the moment it's useful: add a
-course to a plan and see, immediately, what blocks it and what it counts
-towards.
+ANU's Programs and Courses holds every enrolment rule, and ISIS enforces
+them. Both know whether you're eligible and whether your plan will
+graduate you — neither tells you then. Fine Print surfaces that same data
+at the moment it's useful: add a course and see immediately what blocks
+it and what it counts towards.
 
 ## What good looks like here
 
@@ -30,31 +29,29 @@ gaps are worth naming rather than hiding. That judgement is below.
 course completed in a strictly earlier term — except where ANU's prose
 says "completed **or be currently studying**" (or "currently enrolled
 in"), modelled as a `concurrent: true` flag allowing the same term
-instead. This is load-bearing: COMP6120's real requisite permits
-"completed or currently studying COMP6442", and a strictly-earlier-only
-model would have falsely blocked it. A false block is worse than no check
-at all.
+instead. This is load-bearing — a strictly-earlier-only model would have
+falsely blocked COMP6120's real requisite (completed or currently
+studying COMP6442).
 
 **Buckets constrain rather than partition.** A course allocated to one
 bucket doesn't leave the others' totals alone. Each bucket carries a
 minimum, some a maximum, and the 8000-level-COMP requirement is an
-**overlay**: it counts every 8000-level COMP course across the plan toward
-its own 24-unit minimum regardless of bucket, so one course can count
-twice — simultaneous constraints on the same 96 units, not a partition.
+**overlay**: it counts every 8000-level COMP course toward its own
+24-unit minimum regardless of bucket, so one course can count twice —
+simultaneous constraints, not a partition.
 
 ## Data provenance
 
 The original 16 courses are transcribed by hand from ANU Programs and
-Courses into `src/data/seed.json`, committed there — never scraped at
-runtime: the compulsory, foundational and project lists for all three
-Academic Years this app models, the HCC specialisation, and the
-further-computing overlay reference.
+Courses into `src/data/seed.json`, never scraped at runtime: the
+compulsory, foundational and project lists for all three Academic Years,
+the HCC specialisation, and the further-computing overlay reference.
 
-The catalogue now also covers every other COMP and ENGN course at
-6000–8000 level offered in 2026, plus the courses the program rules
-reference — **72 courses** in total, the extra 56 machine-extracted from
-each course's own `/2026/course/<code>` page, all appearing in the plan
-page's catalogue table.
+The catalogue now covers every other COMP and ENGN course at 6000–8000
+level offered in 2026, plus the courses the program rules reference —
+**72 courses**, the extra 56 machine-extracted from each course's own
+`/2026/course/<code>` page, all appearing in the plan page's catalogue
+table.
 
 **56 of the 72 have prerequisites this app does not model** — their
 `requisiteNote` is real ANU prose, the same field the hand-verified 16
@@ -65,16 +62,20 @@ warning citing ANU's own wording, and its catalogue-table cell reads "Not
 modelled" rather than "None".
 
 Four variable-unit courses — **COMP8820, ENGN6200, ENGN8602, ENGN8999** —
-are excluded: Programs and Courses lets their unit value vary by
-enrolment, and this planner assumes one fixed value per course
-(`SeedCourse.units: number`), so seeding them would mean guessing a number
-ANU itself doesn't fix.
+are excluded: their unit value varies by enrolment, and this planner
+assumes one fixed value per course, so seeding them would mean guessing a
+number ANU itself doesn't fix.
 
 `sessions` is read off each course's current Programs and Courses page,
 not filtered to the years this app models, so a course retired after 2025
 still shows whichever semester(s) its page last listed rather than "no
 longer offered". COMP6250 and COMP8260 are the live examples: both still
 display 2025's semesters though ANU stopped running them since.
+
+Seventeen of the 56 additions have no session data at all — their pages
+list no First or Second Semester offering — so they render "—" and are
+blocked in every term with "no semester on record": honest behaviour,
+disclosed here rather than left for a reader to discover.
 
 ### Three simplifications applied to the requisite prose
 

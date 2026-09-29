@@ -90,4 +90,46 @@ describe("a plan", () => {
     expect(html).toContain("COMP6240");
     expect(html).toContain("Relational Databases");
   });
+
+  it("warns, on the rendered page, that an added course's prerequisites aren't modelled", async () => {
+    // COMP6034 (Network Security) is one of the 56 machine-extracted
+    // additions: requisitesModelled: false, sessions: ["S2"]. Term chosen to
+    // land in its one offered session (2028-S2) so this doesn't also trip
+    // the "not-offered" reason and muddy the assertion — the point here is
+    // the requisites-not-modelled warning alone, end to end over HTTP: the
+    // engine (evaluateItem, src/lib/rules/eligibility.ts) pushes the
+    // warning, and the page (src/pages/plan/[slug].astro) is what's
+    // actually under test — it's the only thing standing between that
+    // warning and a visitor. This does not touch the "2027-S2" /
+    // "Remove COMP8410" plan created above; it's a separate plan.
+    const path = await createPlan();
+
+    const form = new URLSearchParams({
+      plan: path.replace("/plan/", ""),
+      course: "COMP6034",
+      term: "2028-S2",
+      status: "planned",
+      action: "add",
+    });
+    const post = await fetch(`${baseUrl}/api/plan-items`, {
+      method: "POST",
+      headers: { origin: baseUrl },
+      body: form,
+      redirect: "manual",
+    });
+    expect(post.status).toBe(303);
+
+    const reloaded = await fetch(`${baseUrl}${path}`);
+    const html = await reloaded.text();
+    // The exact reason text evaluateItem emits for
+    // requisites-not-modelled — distinct from the catalogue table's "Not
+    // modelled" cell, which renders for COMP6034 on every plan page
+    // regardless of whether it was ever added, and so would be a vacuous
+    // assertion on its own. Apostrophes come back HTML-escaped as `&#39;`
+    // (Astro's default text escaping), so the expectation matches that, not
+    // a literal apostrophe.
+    expect(html).toContain(
+      "COMP6034&#39;s prerequisites aren&#39;t modelled by this app — read ANU&#39;s own wording for COMP6034 in the catalogue below before relying on this plan.",
+    );
+  });
 });

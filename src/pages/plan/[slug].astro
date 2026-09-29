@@ -5,7 +5,7 @@ import { findPlan, listItemRows, listItems } from "../../lib/plans";
 import { evaluatePlan } from "../../lib/rules/eligibility";
 import { evaluateProgress } from "../../lib/rules/progress";
 import { bucketUnitsLabel } from "../../lib/bucket-display";
-import { formatPrereqs } from "../../lib/catalogue-display";
+import { formatPrereqs, formatRequisiteNote } from "../../lib/catalogue-display";
 import type { AcademicYear } from "../../lib/seed-types";
 import "../../styles.css";
 
@@ -134,13 +134,15 @@ const catalogueRows = [...catalogue.values()].sort((a, b) => a.code.localeCompar
                     <td>{course.units}</td>
                     <td>{[...course.sessions].sort().join(", ") || "—"}</td>
                     <td>{course.needsPermissionCode ? "Yes" : "No"}</td>
-                    <td>{formatPrereqs(course.prereqs, course.requisitesModelled)}</td>
+                    <td>
+                      {formatPrereqs(course.prereqs, course.requisitesModelled, course.requisiteNote)}
+                    </td>
                   </tr>
                   <tr class="requisite-row">
                     <td colspan="6">
                       <details>
                         <summary>{`${course.code}: ANU's wording`}</summary>
-                        <p>{course.requisiteNote}</p>
+                        <p>{formatRequisiteNote(course.requisiteNote)}</p>
                       </details>
                     </td>
                   </tr>
