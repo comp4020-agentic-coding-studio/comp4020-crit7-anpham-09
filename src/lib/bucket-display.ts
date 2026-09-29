@@ -15,7 +15,7 @@ export function isMaxStyleBucket(
 /** What the "Units" column of the progress table should read for one bucket. */
 export function bucketUnitsLabel(bucket: BucketReport): string {
   if (isMaxStyleBucket(bucket)) {
-    return `${bucket.allocatedUnits}/${bucket.capUnits}u max`;
+    return `${bucket.allocatedUnits} / ${bucket.capUnits}u max`;
   }
-  return `${bucket.allocatedUnits} / ${bucket.requiredUnits}`;
+  return `${bucket.allocatedUnits} / ${bucket.requiredUnits}u`;
 }

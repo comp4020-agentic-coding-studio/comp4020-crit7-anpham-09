@@ -99,6 +99,33 @@ so this file is what holds them.
 - **No web font.** An external font request is a failure mode on a deployed
   page that nothing in the check roster catches.
 
+## Rules this week earned (C7, Fine Print)
+
+- **A test POSTing to an API route needs an `Origin` header.** `astro.config.ts`
+  sets `security.allowedDomains`, and Astro's CSRF check rejects a form POST
+  with no `Origin`, or one that doesn't match, with a **403** --- confirmed
+  empirically against the built server: no header fails, `origin: baseUrl`
+  succeeds with a 303. A browser sends this automatically; a test has to set
+  it itself.
+- **`(...args: never[]) => any` fails `astro check`** as a placeholder type for
+  a not-yet-written dynamically-imported module. `never[]` can't be assigned
+  the arguments a real call site passes it. Use `any[]` (or a looser rest
+  type) for the placeholder instead --- the point of the placeholder is to
+  satisfy the typechecker until the real import resolves, not to type the
+  call.
+- **A test that has never been seen to fail is not evidence.** The
+  `loadBuckets()` sort assertion passed from the day it was written, because
+  it compared the result to a sorted copy of itself and the seed data
+  happened to arrive pre-sorted --- the assertion could not have caught a
+  broken sort. Deleting the sort call entirely left the suite green. Before
+  trusting a green test, break the behaviour it claims to guard and confirm
+  the test goes red; if it doesn't, the test isn't testing that behaviour.
+- **`.superpowers/` is gitignored scratch.** Plans, briefs, progress ledgers
+  and verified-data notes live there for the agent's own use during the week;
+  none of it ships. Anything a marker needs to read belongs in a tracked
+  file --- `README.md`, `PROCESS.md`, `reflections/`, or the spec/plan docs
+  under `docs/`.
+
 ## This file is yours
 
 Keep growing this file as the agent gets corrected or a new rule earns its

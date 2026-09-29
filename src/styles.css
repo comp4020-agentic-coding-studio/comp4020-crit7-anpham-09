@@ -3,7 +3,7 @@ body {
   padding: 2rem;
   font-family: system-ui, sans-serif;
   line-height: 1.6;
-  color: #1a1a1a;
+  color: var(--colour-text);
 }
 
 main {
@@ -12,7 +12,7 @@ main {
 }
 
 a {
-  color: #0b5fff;
+  color: var(--colour-link);
 }
 
 form {
@@ -40,6 +40,8 @@ button {
 }
 
 :root {
+  --colour-text: oklch(0.22 0 90);
+  --colour-link: oklch(0.55 0.25 262);
   --colour-blocking: oklch(0.52 0.19 25);
   --colour-warning: oklch(0.55 0.12 75);
   --colour-rule: oklch(0.87 0 0);
@@ -47,6 +49,8 @@ button {
 
 @media (prefers-color-scheme: dark) {
   :root {
+    --colour-text: oklch(0.22 0 90);
+    --colour-link: oklch(0.55 0.25 262);
     --colour-blocking: oklch(0.72 0.16 25);
     --colour-warning: oklch(0.78 0.11 75);
     --colour-rule: oklch(0.35 0 0);
