@@ -1,6 +1,6 @@
 import { existsSync } from "node:fs";
 import { beforeAll, describe, expect, it } from "vitest";
-import type { SeedCourse } from "../src/lib/seed-types";
+import type { SeedBucket, SeedCourse } from "../src/lib/seed-types";
 
 const ELIGIBILITY = "../src/lib/rules/eligibility";
 
@@ -125,5 +125,108 @@ describe("eligibility", () => {
     const items = [planned("COMP8410", "2026-S2"), planned("COMP8410", "2027-S2")];
     const verdict = evaluateItem(items[0], CATALOGUE, items);
     expect(verdict.reasons.map((r: { kind: string }) => r.kind)).toContain("duplicate");
+  });
+});
+
+const PROGRESS = "../src/lib/rules/progress";
+
+// Resolved dynamically below, so the type cannot be known statically.
+let evaluateProgress: (...args: any[]) => any;
+
+beforeAll(async () => {
+  expect(existsSync(new URL(`${PROGRESS}.ts`, import.meta.url))).toBe(true);
+  ({ evaluateProgress } = await import(PROGRESS));
+});
+
+function bucket(over: Partial<SeedBucket> & { key: string }): SeedBucket {
+  return {
+    label: over.key,
+    minUnits: 0,
+    capUnits: 96,
+    kind: "list",
+    mode: "consuming",
+    exclusive: false,
+    members: [],
+    subjects: [],
+    minLevel: null,
+    maxLevel: null,
+    sortOrder: 1,
+    ...over,
+  };
+}
+
+describe("progress", () => {
+  it("counts an 8000-level COMP course toward the overlay even when the specialisation consumed it", () => {
+    const buckets = [
+      bucket({ key: "specialisation", minUnits: 24, capUnits: 24, sortOrder: 1 }),
+      bucket({
+        key: "comp8000",
+        minUnits: 24,
+        mode: "overlay",
+        kind: "predicate",
+        subjects: ["COMP"],
+        minLevel: 8000,
+        maxLevel: 8000,
+        sortOrder: 2,
+      }),
+    ];
+    const items = [planned("COMP8020", "2026-S2")];
+    const report = evaluateProgress(items, CATALOGUE, buckets, ["COMP8020"], 96);
+
+    const spec = report.buckets.find((b: { key: string }) => b.key === "specialisation");
+    const overlay = report.buckets.find((b: { key: string }) => b.key === "comp8000");
+    expect(spec.allocatedUnits).toBe(6);
+    expect(overlay.allocatedUnits).toBe(6);
+  });
+
+  it("reports an exclusive bucket over its cap as exceeded", () => {
+    const buckets = [
+      bucket({
+        key: "project",
+        minUnits: 0,
+        capUnits: 12,
+        exclusive: true,
+        members: ["COMP6390", "COMP8410", "COMP8600"],
+      }),
+    ];
+    const items = [
+      planned("COMP6390", "2026-S1"),
+      planned("COMP8410", "2026-S2"),
+      planned("COMP8600", "2027-S1"),
+    ];
+    const report = evaluateProgress(items, CATALOGUE, buckets, [], 96);
+    const project = report.buckets.find((b: { key: string }) => b.key === "project");
+    expect(project.allocatedUnits).toBe(12);
+    expect(project.status).toBe("exceeded");
+    expect(report.unallocated).toContain("COMP8600");
+  });
+
+  it("reports an unfilled minimum as unmet", () => {
+    const buckets = [bucket({ key: "foundational", minUnits: 6, capUnits: 6, members: ["COMP6390"] })];
+    const report = evaluateProgress([], CATALOGUE, buckets, [], 96);
+    expect(report.buckets[0].status).toBe("unmet");
+  });
+
+  it("overflows a non-exclusive bucket into the next one", () => {
+    const buckets = [
+      bucket({ key: "foundational", minUnits: 6, capUnits: 6, members: ["COMP6390", "COMP8410"], sortOrder: 1 }),
+      bucket({ key: "elective", minUnits: 6, capUnits: 18, kind: "predicate", sortOrder: 2 }),
+    ];
+    const items = [planned("COMP6390", "2026-S1"), planned("COMP8410", "2026-S2")];
+    const report = evaluateProgress(items, CATALOGUE, buckets, [], 96);
+    expect(report.buckets.find((b: { key: string }) => b.key === "foundational").allocatedUnits).toBe(6);
+    expect(report.buckets.find((b: { key: string }) => b.key === "elective").allocatedUnits).toBe(6);
+  });
+
+  it("is complete only when every minimum is met, nothing is exceeded, and the total is reached", () => {
+    const buckets = [bucket({ key: "elective", minUnits: 12, capUnits: 12, kind: "predicate" })];
+    const items = [planned("COMP6390", "2026-S1"), planned("COMP8410", "2026-S2")];
+
+    const short = evaluateProgress(items, CATALOGUE, buckets, [], 96);
+    expect(short.complete).toBe(false);
+    expect(short.totalUnits).toBe(12);
+
+    const reached = evaluateProgress(items, CATALOGUE, buckets, [], 12);
+    expect(reached.complete).toBe(true);
   });
 });
