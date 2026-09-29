@@ -41,19 +41,21 @@ minimum, some carry a maximum, and the 8000-level-COMP requirement is an
 **overlay**: it counts every 8000-level COMP course across the plan toward
 its own 24-unit minimum, independent of which bucket that course was
 allocated to, so one course can be spent by one bucket and still count
-there too. This is the honest reading of the program's rules: simultaneous
-constraints on the same 96 units, not a partition of them.
+there too. This is the honest reading: simultaneous constraints on the
+same 96 units, not a partition of them.
 
 ## Data provenance
 
 The catalogue is transcribed by hand from the live ANU Programs and Courses
 pages (2026) into `src/data/seed.json`, and committed there — never scraped
-at runtime. A scraper (`scripts/scrape-pc.ts`) was planned as a stretch task
-to widen the catalogue; it was cut, deliberately, in favour of the
-eligibility and progress engines the spec's published lines actually grade.
+at runtime. A scraper (`scripts/scrape-pc.ts`) was planned to widen the
+catalogue; cut deliberately, in favour of the eligibility and progress
+engines the spec's published lines actually grade.
 The seed that ships covers **13 courses** — the compulsory, foundational
 and project lists, the HCC specialisation, and the further-computing
-overlay reference — real ANU data, just not the whole catalogue.
+overlay reference — real ANU data, just not the whole catalogue. All 13
+are listed on the plan page's own catalogue table, so discovery is not
+out of scope here — only the wider catalogue is.
 
 ### Three simplifications applied to the requisite prose
 

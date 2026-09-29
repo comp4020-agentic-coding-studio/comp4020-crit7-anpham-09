@@ -5,6 +5,7 @@ import { findPlan, listItemRows, listItems } from "../../lib/plans";
 import { evaluatePlan } from "../../lib/rules/eligibility";
 import { evaluateProgress } from "../../lib/rules/progress";
 import { bucketUnitsLabel } from "../../lib/bucket-display";
+import { formatPrereqs } from "../../lib/catalogue-display";
 import "../../styles.css";
 
 const { slug } = Astro.params;
@@ -31,6 +32,7 @@ const progress = evaluateProgress(
 );
 
 const terms = [...new Set(rows.map((r) => r.term))].sort();
+const catalogueRows = [...catalogue.values()].sort((a, b) => a.code.localeCompare(b.code));
 ---
 
 <!doctype html>
@@ -93,6 +95,44 @@ const terms = [...new Set(rows.map((r) => r.term))].sort();
             </article>
           ))
         }
+      </section>
+
+      <section aria-labelledby="catalogue">
+        <h2 id="catalogue">Catalogue</h2>
+        <p>
+          Every course this app knows about, so you never have to type a code
+          blind. Prerequisites are the structured rule this app checks; the
+          requisite note alongside is ANU's own prose in full.
+        </p>
+        <table>
+          <caption>The seeded catalogue, {catalogueRows.length} courses, by code</caption>
+          <thead>
+            <tr>
+              <th scope="col">Code</th>
+              <th scope="col">Title</th>
+              <th scope="col">Units</th>
+              <th scope="col">Sessions</th>
+              <th scope="col">Permission code</th>
+              <th scope="col">Prerequisites</th>
+              <th scope="col">Requisite note</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              catalogueRows.map((course) => (
+                <tr>
+                  <th scope="row">{course.code}</th>
+                  <td>{course.title}</td>
+                  <td>{course.units}</td>
+                  <td>{[...course.sessions].sort().join(", ") || "—"}</td>
+                  <td>{course.needsPermissionCode ? "Yes" : "No"}</td>
+                  <td>{formatPrereqs(course.prereqs)}</td>
+                  <td>{course.requisiteNote}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
       </section>
 
       <section aria-labelledby="add">

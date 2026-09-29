@@ -52,12 +52,19 @@ describe("a plan", () => {
     const html = await reloaded.text();
     // "2027-S1" is the page's own term placeholder, so it's a false match on
     // an empty plan; "2027-S2" only appears if the posted item was actually
-    // stored. "Data Mining" is COMP8410's catalogue title, rendered only
-    // when the item resolves against the catalogue — a second, independent
-    // signal that persistence (not just a static placeholder) is what's
-    // showing up.
+    // stored — the catalogue table (present on every plan page, even an
+    // empty one) never renders a term, only "S1"/"S2" session labels, so
+    // this stays a unique signal for persistence.
+    //
+    // "Data Mining" (COMP8410's catalogue title) is deliberately NOT used
+    // here any more: the plan page now renders the whole seeded catalogue
+    // as a table on every load, so "Data Mining" appears whether or not
+    // this POST persisted anything — it would be a vacuous assertion. The
+    // second, independent signal instead is the per-item "Remove" button,
+    // which is only rendered for a course actually stored against this
+    // plan (the catalogue table has no such button for any course).
     expect(html).toContain("2027-S2");
-    expect(html).toContain("Data Mining");
+    expect(html).toContain("Remove COMP8410");
   });
 
   it("404s on an unknown slug", async () => {
@@ -71,5 +78,16 @@ describe("a plan", () => {
     const html = await res.text();
     expect(html).toContain("COMP6390");
     expect(html).toMatch(/must be completed before/);
+  });
+
+  it("lists the seeded catalogue, not just what's already in the plan", async () => {
+    // The demo plan only ever carries COMP6120 and COMP8020 (src/lib/plans.ts
+    // seedDemoPlan). COMP6240 / "Relational Databases" is neither of those,
+    // so it can only appear on the page via the catalogue table. If that
+    // table is removed, this fails.
+    const res = await fetch(`${baseUrl}/plan/demo`);
+    const html = await res.text();
+    expect(html).toContain("COMP6240");
+    expect(html).toContain("Relational Databases");
   });
 });
